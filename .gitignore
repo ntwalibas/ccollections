@@ -1,0 +1,5 @@
+bazel-*
+release/
+Process.md
+VERSION
+.DS_Store

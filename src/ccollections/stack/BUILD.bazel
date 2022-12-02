@@ -1,0 +1,6 @@
+cc_library(
+    name = "stack",
+    srcs = ["stack.c"],
+    hdrs = ["stack.h"],
+    visibility = ["//tests/ccollections/stack:__pkg__"],
+)
