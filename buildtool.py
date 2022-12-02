@@ -3,7 +3,7 @@
 """This command line utility helps automate some builds activities.
 The available commands are explained below for quick reference.
 
-# Show the version of this buildtool
+# Sets and/or shows the current version of the project under development
 ./buildtool version
 
 # Runs Bazel to outputs the necessary binaries
@@ -72,9 +72,22 @@ def _run(command, verbose, non_verbose_message = ""):
 
 
 @app.command()
-def version():
-    """Prints the current known version of this project from the VERSION file at the root directory."""
-    print(f"0.0.1")
+def version(set_version: str = typer.Option(None, "--set", "-s")):
+    """Sets and/or prints the current version of this project from the VERSION file at the root directory."""
+    if set_version:
+        if semver.VersionInfo.isvalid(set_version):
+            with _touchopen("VERSION", "w+") as version_file:
+                version_file.seek(0)
+                version_file.write(set_version)
+                version_file.truncate()
+
+    with _touchopen("VERSION", 'r') as version_file:
+        version = version_file.read()
+        if not version:
+            print(f"No version has been assigned to this project.")
+            exit(1)
+        
+        print(version)
 
 
 @app.command()
