@@ -27,7 +27,6 @@ struct Stack {
     void ** elements;
     size_t size;
     size_t top;
-    char const * message;
 };
 
 
@@ -36,7 +35,7 @@ struct Stack {
  *
  * @return      the newly created stack.
  */
-struct Stack * newStack(size_t size, char const * message);
+struct Stack * newStack(size_t size);
 
 
 /**

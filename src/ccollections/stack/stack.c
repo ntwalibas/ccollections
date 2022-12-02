@@ -31,20 +31,24 @@ float stack_growth_factor = 1.75;
  *
  * @return      the newly created stack.
  */
-struct Stack * newStack(size_t initial_size, char const * message) {
-    if(initial_size == 0)
+struct Stack * newStack(size_t initial_size) {
+    char const * message = NULL;
+    if(initial_size == 0) {
+        message = "Initial stack size cannot be zero.";
         goto exit;
+    }
 
     struct Stack * stack = malloc(sizeof *stack);
-    if (stack == NULL)
+    if (stack == NULL) {
+        message = "Stack initialization failed, cannot allocate memory.";
         goto exit;
+    }
 
     stack -> elements = malloc(initial_size * sizeof *stack -> elements);
     if (stack -> elements == NULL)
         goto exit;
     stack -> size = initial_size;
     stack -> top = 0;
-    stack -> message = message;
 
     return stack;
 
@@ -87,7 +91,7 @@ bool isStackEmpty(struct Stack const * const stack) {
     return stack -> top == 0;
 
 exit:
-    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: isStackEmpty.\nMessage: %s\n", __FILE__, __LINE__, stack ? stack -> message : message);
+    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: isStackEmpty.\nMessage: %s\n", __FILE__, __LINE__, message);
     exit(74);
 }
 
@@ -100,14 +104,21 @@ exit:
  * @return      the element at the top of the stack.
  */
 void * stackTop(struct Stack const * const stack) {
-    char const * message = "The parameter <stack> cannot be NULL.";
-    if (stack == NULL)
+    char const * message = NULL;
+    if (stack == NULL) {
+        message = "The parameter <stack> cannot be NULL.";
         goto exit;
+    }
 
-    return stack -> elements[stack -> top];
+    if (stack-> top == 0) {
+        message = "The stack is empty, cannot get the top element.";
+        goto exit;
+    }
+
+    return stack -> elements[stack -> top - 1];
 
 exit:
-    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: stackTop.\nMessage: %s\n", __FILE__, __LINE__, stack ? stack -> message : message);
+    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: stackTop.\nMessage: %s\n", __FILE__, __LINE__, message);
     exit(74);
 }
 
@@ -119,15 +130,19 @@ exit:
  * @param       element pointer to the element to push onto the stack.
  */
 void stackPush(struct Stack * const stack, void * element) {
-    char const * message = "The parameter <stack> cannot be NULL.";
-    if (stack == NULL)
+    char const * message = NULL;
+    if (stack == NULL) {
+        message = "The parameter <stack> cannot be NULL.";
         goto exit;
+    }
 
     if (stack -> top == stack -> size) {
-        size_t new_size = stack_growth_factor * sizeof(*stack -> elements);
+        size_t new_size = stack_growth_factor * stack -> size;
         void ** new_elements = realloc(stack -> elements, new_size * sizeof *stack -> elements);
-        if (new_elements == NULL)
+        if (new_elements == NULL) {
+            message = "Failed to allocated space for new elements.";
             goto exit;
+        }
 
         stack -> elements = new_elements;
         stack -> size = new_size;
@@ -135,8 +150,10 @@ void stackPush(struct Stack * const stack, void * element) {
 
     stack -> elements[stack -> top++] = element;
 
+    return;
+
 exit:
-    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: stackPush.\nMessage: %s\n", __FILE__, __LINE__, stack ? stack -> message : message);
+    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: stackPush.\nMessage: %s\n", __FILE__, __LINE__, message);
     exit(74);
 }
 
@@ -149,16 +166,20 @@ exit:
  * @return      pointer to the element popped off the stack top.
  */
 void * stackPop(struct Stack * const stack) {
-    char const * message = "The parameter <stack> cannot be NULL.";
-    if (stack == NULL)
+    char const * message = NULL;
+    if (stack == NULL) {
+        message = "The parameter <stack> cannot be NULL.";
         goto exit;
+    }
 
-    if (stack -> top == stack -> size)
+    if (stack -> top == 0) {
+        message = "Stack is empty, it cannot be popped.";
         goto exit;
+    }
 
-    return stack -> elements[stack -> top--];
+    return stack -> elements[-- (stack -> top)];
 
 exit:
-    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: stackPop.\nMessage: %s\n", __FILE__, __LINE__, stack ? stack -> message : message);
+    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: stackPop.\nMessage: %s\n", __FILE__, __LINE__, message);
     exit(74);
 }
