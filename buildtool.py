@@ -214,10 +214,9 @@ def release(
     
     # Create the bin path where everything will go -- this will create the needed parents as well
     ccollections_path = os.path.join("release", "ccollections")
-    bin_path = os.path.join(ccollections_path, 'bin')
-    # ccollections_pathlib = pathlib.Path(ccollections_path)
-    bin_pathlib = pathlib.Path(bin_path)
-    bin_pathlib.mkdir(parents = True, exist_ok = True)
+    lib_path = os.path.join(ccollections_path, 'lib')
+    lib_pathlib = pathlib.Path(lib_path)
+    lib_pathlib.mkdir(parents = True, exist_ok = True)
 
     # Copy headers and artifacts
     for target in track(targets, description = "Releasing"):
@@ -233,7 +232,7 @@ def release(
         query_result = run(query_cmd, capture_output = True, text = True)
         artifacts = [y for y in (x.strip() for x in query_result.stdout.splitlines()) if y]
         for artifact in artifacts:
-            artifact_dest = os.path.join(bin_path, os.path.basename(artifact))
+            artifact_dest = os.path.join(lib_path, os.path.basename(artifact))
             with _touchopen(artifact_dest, 'w'):
                 shutil.copyfile(artifact, artifact_dest)
 
