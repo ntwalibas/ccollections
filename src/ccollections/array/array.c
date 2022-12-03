@@ -25,6 +25,7 @@
 
 static void * _arrayCollectionGet(struct Collection const * const collection, size_t index);
 static void _arrayCollectionSet(struct Collection * const collection, size_t index, void * element);
+static bool _arrayCollectionAtEnd(struct Collection const * const collection, size_t index);
 static int _arrayCollectionCompare(struct Collection const * const collection, size_t index_1, size_t index_2);
 
 float array_growth_factor = 1.75;
@@ -50,16 +51,11 @@ struct Array * newArray(size_t initial_capacity) {
         return NULL;
     }
 
-    struct Indexable * indexable_vptr = malloc(sizeof *indexable_vptr);
-    indexable_vptr -> get = _arrayCollectionGet;
-    indexable_vptr -> set = _arrayCollectionSet;
-
-    struct Comparable * comparable_vptr = malloc(sizeof *comparable_vptr);
-    comparable_vptr -> compare = _arrayCollectionCompare;
-
     struct Collection super = {
-        .indexable_vptr = indexable_vptr,
-        .comparable_vptr = comparable_vptr
+        .get = _arrayCollectionGet,
+        .set = _arrayCollectionSet,
+        .atEnd = _arrayCollectionAtEnd,
+        .compare = _arrayCollectionCompare,
     };
 
     array -> super = super;
@@ -86,8 +82,6 @@ void deleteArray(struct Array ** const array) {
     if (* array == NULL)
         return;
 
-    free((void *)(* array) -> super.indexable_vptr);
-    free((void *)(* array) -> super.comparable_vptr);
     free((* array) -> elements);
     free(* array);
     * array = NULL;
@@ -294,3 +288,26 @@ exit:
     fprintf(stderr, "File: %s.\nOperation: _arrayCollectionCompare.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
+
+
+static bool _arrayCollectionAtEnd(struct Collection const * const collection, size_t index) {
+    struct Array const * const array = (struct Array const * const) collection;
+    const char * message = NULL;
+
+    if (array == NULL) {
+        message = "The parameter <array> cannot be NULL.";
+        goto exit;
+    }
+
+    if (array -> size == 0) {
+        message = "The array is empty, cannot check if at end.";
+        goto exit;
+    }
+
+    return index >= array -> size;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: _arrayCollectionAtEnd.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+

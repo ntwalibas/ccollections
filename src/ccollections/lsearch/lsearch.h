@@ -15,19 +15,22 @@
  *  limitations under the License.
  */
 
-#ifndef CCOLLECTIONS_INTERFACE_H
-#define CCOLLECTIONS_INTERFACE_H
+#ifndef CCOLLECTIONS_LSEARCH_H
+#define CCOLLECTIONS_LSEARCH_H
 
-#include <stdbool.h>
 #include <stddef.h>
 
-struct Collection {
-    void * (* get)(struct Collection const * const collection, size_t index);
-    void (* set)(struct Collection * const collection, size_t index, void * element);
-    bool (* atEnd)(struct Collection const * const collection, size_t index);
-    int (* compare)(struct Collection const * const collection, size_t index_1, size_t index_2);
-};
+#include "../interfaces/interfaces.h"
 
-typedef int (* Comparator)(void const * a, void const * b);
+/**
+ * Performs a linear search on the given collection.
+ *
+ * @param       collection  the collection to search from.
+ * @param       element     the element to search for.
+ * @param       compare     the function to use to compare elements.
+ *
+ * @return      the index of the element searched if found, -1 otherwise.
+ */
+int lsearch(struct Collection const * const collection, void const * const element, Comparator compare);
 
 #endif
