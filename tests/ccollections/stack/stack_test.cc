@@ -35,12 +35,12 @@ TEST_F(StackTest, newStackTest) {
     const char message[] = "Initial stack size cannot be zero.";
     
     int size = snprintf(NULL, 0, formatter, file, line, message);
-    char * expectedMessage = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expectedMessage, size + 1, formatter, file, line, message);
+    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
+    snprintf(expected_message, size + 1, formatter, file, line, message);
 
-    EXPECT_DEATH(newStack(0), expectedMessage);
+    EXPECT_DEATH(newStack(0), expected_message);
 
-    free(expectedMessage);
+    free(expected_message);
 }
 
 // deleteStack
@@ -65,12 +65,12 @@ TEST_F(StackTest, isStackEmptyTest) {
     const char message[] = "The parameter <stack> cannot be NULL.";
     
     int size = snprintf(NULL, 0, formatter, file, line, message);
-    char * expectedMessage = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expectedMessage, size + 1, formatter, file, line, message);
+    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
+    snprintf(expected_message, size + 1, formatter, file, line, message);
 
-    EXPECT_DEATH(isStackEmpty(stack), expectedMessage);
+    EXPECT_DEATH(isStackEmpty(stack), expected_message);
 
-    free(expectedMessage);
+    free(expected_message);
 }
 
 // stackTop
@@ -82,12 +82,12 @@ TEST_F(StackTest, stackTopTest) {
     const char message1[] = "The stack is empty, cannot get the top element.";
     
     int size1 = snprintf(NULL, 0, formatter1, file1, line1, message1);
-    char * expectedMessage1 = (char *) malloc((size1 + 1) * sizeof(char));
-    snprintf(expectedMessage1, size1 + 1, formatter1, file1, line1, message1);
+    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
+    snprintf(expected_message1, size1 + 1, formatter1, file1, line1, message1);
 
-    EXPECT_DEATH(stackTop(stack), expectedMessage1);
+    EXPECT_DEATH(stackTop(stack), expected_message1);
 
-    free(expectedMessage1);
+    free(expected_message1);
 
 
     // Add an element to the stack and verify that stackTop is indeed the recently pushed element
@@ -106,12 +106,12 @@ TEST_F(StackTest, stackTopTest) {
     const char message2[] = "The parameter <stack> cannot be NULL.";
     
     int size2 = snprintf(NULL, 0, formatter2, file2, line2, message2);
-    char * expectedMessage2 = (char *) malloc((size2 + 1) * sizeof(char));
-    snprintf(expectedMessage2, size2 + 1, formatter2, file2, line2, message2);
+    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
+    snprintf(expected_message2, size2 + 1, formatter2, file2, line2, message2);
 
-    EXPECT_DEATH(stackTop(stack), expectedMessage2);
+    EXPECT_DEATH(stackTop(stack), expected_message2);
 
-    free(expectedMessage2);
+    free(expected_message2);
 }
 
 // stackPush
@@ -130,12 +130,12 @@ TEST_F(StackTest, stackPushTest) {
     const char message[] = "The parameter <stack> cannot be NULL.";
     
     int size = snprintf(NULL, 0, formatter, file, line, message);
-    char * expectedMessage = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expectedMessage, size + 1, formatter, file, line, message);
+    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
+    snprintf(expected_message, size + 1, formatter, file, line, message);
 
-    EXPECT_DEATH(stackPush(stack, &value), expectedMessage);
+    EXPECT_DEATH(stackPush(stack, &value), expected_message);
 
-    free(expectedMessage);
+    free(expected_message);
 }
 
 // stackPop
@@ -147,12 +147,12 @@ TEST_F(StackTest, stackPopTest) {
     const char message1[] = "Stack is empty, it cannot be popped.";
     
     int size1 = snprintf(NULL, 0, formatter1, file1, line1, message1);
-    char * expectedMessage1 = (char *) malloc((size1 + 1) * sizeof(char));
-    snprintf(expectedMessage1, size1 + 1, formatter1, file1, line1, message1);
+    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
+    snprintf(expected_message1, size1 + 1, formatter1, file1, line1, message1);
 
-    EXPECT_DEATH(stackPop(stack), expectedMessage1);
+    EXPECT_DEATH(stackPop(stack), expected_message1);
 
-    free(expectedMessage1);
+    free(expected_message1);
 
     // Pop an element and verify if it was returned and the top element tracker moved
     int value = 1;
@@ -170,10 +170,10 @@ TEST_F(StackTest, stackPopTest) {
     const char message2[] = "The parameter <stack> cannot be NULL.";
     
     int size2 = snprintf(NULL, 0, formatter2, file2, line2, message2);
-    char * expectedMessage2 = (char *) malloc((size2 + 1) * sizeof(char));
-    snprintf(expectedMessage2, size2 + 1, formatter2, file2, line2, message2);
+    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
+    snprintf(expected_message2, size2 + 1, formatter2, file2, line2, message2);
 
-    EXPECT_DEATH(stackPop(stack), expectedMessage2);
+    EXPECT_DEATH(stackPop(stack), expected_message2);
 
-    free(expectedMessage2);
+    free(expected_message2);
 }
