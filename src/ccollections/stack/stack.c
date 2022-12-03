@@ -32,12 +32,9 @@ float stack_growth_factor = 1.75;
  * @return      the newly created stack.
  */
 struct Stack * newStack(size_t initial_size) {
-    const char * message = NULL;
-
-    if(initial_size == 0) {
-        message = "Initial stack size cannot be zero.";
+    const char * message = "Initial stack size cannot be zero.";
+    if(initial_size == 0)
         goto exit;
-    }
 
     struct Stack * stack = malloc(sizeof *stack);
     if (stack == NULL)
@@ -55,7 +52,7 @@ struct Stack * newStack(size_t initial_size) {
     return stack;
 
 exit:
-    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: newStack.\nMessage: %s\n", __FILE__, __LINE__, message);
+    fprintf(stderr, "File: %s.\nOperation: newStack.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
@@ -93,7 +90,7 @@ bool isStackEmpty(struct Stack const * const stack) {
     return stack -> top == 0;
 
 exit:
-    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: isStackEmpty.\nMessage: %s\n", __FILE__, __LINE__, message);
+    fprintf(stderr, "File: %s.\nOperation: isStackEmpty.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
@@ -120,7 +117,7 @@ void * stackTop(struct Stack const * const stack) {
     return stack -> elements[stack -> top - 1];
 
 exit:
-    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: stackTop.\nMessage: %s\n", __FILE__, __LINE__, message);
+    fprintf(stderr, "File: %s.\nOperation: stackTop.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
@@ -155,7 +152,7 @@ void stackPush(struct Stack * const stack, void * element) {
     return;
 
 exit:
-    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: stackPush.\nMessage: %s\n", __FILE__, __LINE__, message);
+    fprintf(stderr, "File: %s.\nOperation: stackPush.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
@@ -182,6 +179,6 @@ void * stackPop(struct Stack * const stack) {
     return stack -> elements[-- (stack -> top)];
 
 exit:
-    fprintf(stderr, "File: %s.\nLine: %d.\nOperation: stackPop.\nMessage: %s\n", __FILE__, __LINE__, message);
+    fprintf(stderr, "File: %s.\nOperation: stackPop.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
