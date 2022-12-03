@@ -199,3 +199,37 @@ exit:
     fprintf(stderr, "File: %s.\nOperation: arrayGet.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
+
+
+/**
+ * Set an element at the specified index.
+ *
+ * @param       array pointer to array to use.
+ * @param       index the index at which to write.
+ * @param       element the element to write at the specified index.
+ */
+void arraySet(struct Array const * const array, size_t index, void * element) {
+    char const * message = NULL;
+    
+    if (array == NULL) {
+        message = "The parameter <array> cannot be NULL.";
+        goto exit;
+    }
+
+    if (array -> size == 0) {
+        message = "The array is empty, cannot set elements.";
+        goto exit;
+    }
+
+    if (index >= array -> size) {
+        message = "The index is out of bounds.";
+        goto exit;
+    }
+
+    array -> elements[index] = element;
+    return;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: arraySet.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}

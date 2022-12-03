@@ -86,4 +86,14 @@ void arrayAppend(struct Array * const array, void * element);
  */
 void * arrayGet(struct Array const * const array, size_t index);
 
+
+/**
+ * Set an element at the specified index.
+ *
+ * @param       array pointer to array to use.
+ * @param       index the index at which to write.
+ * @param       element the element to write at the specified index.
+ */
+void arraySet(struct Array const * const array, size_t index, void * element);
+
 #endif

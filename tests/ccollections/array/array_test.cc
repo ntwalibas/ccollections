@@ -151,6 +151,7 @@ TEST_F(ArrayTest, arrayGetTest) {
     EXPECT_EQ(element, & value);
     EXPECT_EQ(* element, value);
 
+
     // Try to get an element beyond what's been added
     const char formatter2[] = "File: %s.\nOperation: arrayGet.\nMessage: %s\n";
     const char file2[] = "src/ccollections/array/array.c";
@@ -177,6 +178,62 @@ TEST_F(ArrayTest, arrayGetTest) {
     snprintf(expected_message3, size3 + 1, formatter3, file3, message3);
 
     EXPECT_DEATH(arrayGet(array, 0), expected_message3);
+
+    free(expected_message3);
+}
+
+// arraySet
+TEST_F(ArrayTest, arraySetTest) {
+    // No elements have been added to the array, we should not be able to set elements
+    int value1 = 1;
+    const char formatter1[] = "File: %s.\nOperation: arraySet.\nMessage: %s\n";
+    const char file1[] = "src/ccollections/array/array.c";
+    const char message1[] = "The array is empty, cannot set elements.";
+    
+    int size1 = snprintf(NULL, 0, formatter1, file1, message1);
+    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
+    snprintf(expected_message1, size1 + 1, formatter1, file1, message1);
+
+    EXPECT_DEATH(arraySet(array, 0, &value1), expected_message1);
+
+    free(expected_message1);
+
+
+    // Add an element to the array and verify that we set it at index 0
+    int value2 = 2;
+    arrayAppend(array, &value1);
+    arraySet(array, 0, &value2);
+    int * element = (int *) arrayGet(array, 0);
+    EXPECT_EQ(element, & value2);
+    EXPECT_EQ(* element, value2);
+
+
+    // Try to get an element beyond what's been added
+    const char formatter2[] = "File: %s.\nOperation: arraySet.\nMessage: %s\n";
+    const char file2[] = "src/ccollections/array/array.c";
+    const char message2[] = "The index is out of bounds.";
+    
+    int size2 = snprintf(NULL, 0, formatter2, file2, message2);
+    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
+    snprintf(expected_message2, size2 + 1, formatter2, file2, message2);
+
+    EXPECT_DEATH(arraySet(array, 1, &value2), expected_message2);
+
+    free(expected_message2);
+
+
+    // We delete the array, we should not be able to get the top element
+    deleteArray(&array);
+
+    const char formatter3[] = "File: %s.\nOperation: arraySet.\nMessage: %s\n";
+    const char file3[] = "src/ccollections/array/array.c";
+    const char message3[] = "The parameter <array> cannot be NULL.";
+    
+    int size3 = snprintf(NULL, 0, formatter3, file3, message3);
+    char * expected_message3 = (char *) malloc((size3 + 1) * sizeof(char));
+    snprintf(expected_message3, size3 + 1, formatter3, file3, message3);
+
+    EXPECT_DEATH(arraySet(array, 0, &value2), expected_message3);
 
     free(expected_message3);
 }
