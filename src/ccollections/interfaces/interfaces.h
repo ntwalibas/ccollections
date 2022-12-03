@@ -18,6 +18,9 @@
 #ifndef CCOLLECTIONS_INTERFACE_H
 #define CCOLLECTIONS_INTERFACE_H
 
+#include <stdbool.h>
+#include <stddef.h>
+
 struct Collection;
 
 struct Indexable {
