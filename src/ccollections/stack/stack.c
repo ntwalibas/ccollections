@@ -32,17 +32,14 @@ float stack_growth_factor = 1.75;
  * @return      the newly created stack.
  */
 struct Stack * newStack(size_t initial_size) {
-    char const * message = NULL;
     if(initial_size == 0) {
         message = "Initial stack size cannot be zero.";
         goto exit;
     }
 
     struct Stack * stack = malloc(sizeof *stack);
-    if (stack == NULL) {
-        message = "Stack initialization failed, cannot allocate memory.";
-        goto exit;
-    }
+    if (stack == NULL)
+        return NULL;
 
     stack -> elements = malloc(initial_size * sizeof *stack -> elements);
     if (stack -> elements == NULL)
