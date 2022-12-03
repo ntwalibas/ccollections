@@ -32,6 +32,8 @@ float stack_growth_factor = 1.75;
  * @return      the newly created stack.
  */
 struct Stack * newStack(size_t initial_size) {
+    const char * message = NULL;
+
     if(initial_size == 0) {
         message = "Initial stack size cannot be zero.";
         goto exit;
@@ -42,8 +44,11 @@ struct Stack * newStack(size_t initial_size) {
         return NULL;
 
     stack -> elements = malloc(initial_size * sizeof *stack -> elements);
-    if (stack -> elements == NULL)
-        goto exit;
+    if (stack -> elements == NULL) {
+        free(stack);
+        return NULL;
+    }
+
     stack -> size = initial_size;
     stack -> top = 0;
 
