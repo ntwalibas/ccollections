@@ -35,8 +35,10 @@ struct Comparable {
 
 
 struct Collection {
-    struct Indexable const * indexable_vtable;
-    struct Comparable const * comparable_vtable;
+    struct Indexable const * indexable_vptr;
+    struct Comparable const * comparable_vptr;
 };
+
+typedef int (* Comparator)(void const * a, void const * b);
 
 #endif

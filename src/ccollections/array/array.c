@@ -50,16 +50,16 @@ struct Array * newArray(size_t initial_capacity) {
         return NULL;
     }
 
-    struct Indexable * indexable_vtable = malloc(sizeof *indexable_vtable);
-    indexable_vtable -> get = _arrayCollectionGet;
-    indexable_vtable -> set = _arrayCollectionSet;
+    struct Indexable * indexable_vptr = malloc(sizeof *indexable_vptr);
+    indexable_vptr -> get = _arrayCollectionGet;
+    indexable_vptr -> set = _arrayCollectionSet;
 
-    struct Comparable * comparable_vtable = malloc(sizeof *comparable_vtable);
-    comparable_vtable -> compare = _arrayCollectionCompare;
+    struct Comparable * comparable_vptr = malloc(sizeof *comparable_vptr);
+    comparable_vptr -> compare = _arrayCollectionCompare;
 
     struct Collection super = {
-        .indexable_vtable = indexable_vtable,
-        .comparable_vtable = comparable_vtable
+        .indexable_vptr = indexable_vptr,
+        .comparable_vptr = comparable_vptr
     };
 
     array -> super = super;
@@ -86,8 +86,8 @@ void deleteArray(struct Array ** const array) {
     if (* array == NULL)
         return;
 
-    free((void *)(* array) -> super.indexable_vtable);
-    free((void *)(* array) -> super.comparable_vtable);
+    free((void *)(* array) -> super.indexable_vptr);
+    free((void *)(* array) -> super.comparable_vptr);
     free((* array) -> elements);
     free(* array);
     * array = NULL;
