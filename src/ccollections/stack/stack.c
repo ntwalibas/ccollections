@@ -104,6 +104,7 @@ exit:
  */
 void * stackTop(struct Stack const * const stack) {
     char const * message = NULL;
+    
     if (stack == NULL) {
         message = "The parameter <stack> cannot be NULL.";
         goto exit;
@@ -130,6 +131,7 @@ exit:
  */
 void stackPush(struct Stack * const stack, void * element) {
     char const * message = NULL;
+    
     if (stack == NULL) {
         message = "The parameter <stack> cannot be NULL.";
         goto exit;
@@ -166,6 +168,7 @@ exit:
  */
 void * stackPop(struct Stack * const stack) {
     char const * message = NULL;
+    
     if (stack == NULL) {
         message = "The parameter <stack> cannot be NULL.";
         goto exit;
