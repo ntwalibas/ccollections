@@ -25,8 +25,8 @@ TEST_F(StackTest, newStackTest) {
     // Expect that a new stack was created
     EXPECT_NE(stack, nullptr);
 
-    // Expect that the stack size is equal to 10
-    EXPECT_EQ(stack -> size, 10);
+    // Expect that the stack capacity is equal to 10
+    EXPECT_EQ(stack -> capacity, 10);
 
     // Check that a different stack with size 0 fails to be created
     const char formatter[] = "File: %s.\nOperation: newStack.\nMessage: %s\n";

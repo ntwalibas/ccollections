@@ -25,8 +25,8 @@ extern float array_growth_factor;
 
 struct Array {
     void ** elements;
+    size_t capacity;
     size_t size;
-    size_t count;
 };
 
 
@@ -35,7 +35,7 @@ struct Array {
  *
  * @return      the newly created array.
  */
-struct Array * newArray(size_t size);
+struct Array * newArray(size_t initial_capacity);
 
 
 /**
@@ -44,6 +44,17 @@ struct Array * newArray(size_t size);
  * @param       array pointer to memory occupied by the array.
  */
 void deleteArray(struct Array ** const array);
+
+
+/**
+ * Resizes the given array to higher size.
+ *
+ * @param       array pointer to array to resize.
+ * @param       new_capacity the new capacity of the array.
+ *
+ * @return      the newly created array.
+ */
+struct Array * resizeArray(struct Array * const array, size_t new_capacity);
 
 
 /**

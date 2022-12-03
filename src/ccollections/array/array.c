@@ -31,23 +31,23 @@ float array_growth_factor = 1.75;
  *
  * @return      the newly created array.
  */
-struct Array * newArray(size_t initial_size) {
-    const char * message = "Initial array size cannot be zero.";
-    if(initial_size == 0)
+struct Array * newArray(size_t initial_capacity) {
+    const char * message = "Initial array capacity cannot be zero.";
+    if(initial_capacity == 0)
         goto exit;
 
     struct Array * array = malloc(sizeof *array);
     if (array == NULL)
        return NULL;
 
-    array -> elements = malloc(initial_size * sizeof *array -> elements);
+    array -> elements = malloc(initial_capacity * sizeof *array -> elements);
     if (array -> elements == NULL) {
         free(array);
         return NULL;
     }
 
-    array -> size = initial_size;
-    array -> count = 0;
+    array -> capacity = initial_capacity;
+    array -> size = 0;
 
     return array;
 
@@ -87,7 +87,7 @@ bool isArrayEmpty(struct Array const * const array) {
     if (array == NULL)
         goto exit;
 
-    return array -> count == 0;
+    return array -> size == 0;
 
 exit:
     fprintf(stderr, "File: %s.\nOperation: isArrayEmpty.\nMessage: %s\n", __FILE__, message);
@@ -108,19 +108,19 @@ void arrayAppend(struct Array * const array, void * element) {
         goto exit;
     }
 
-    if (array -> count == array -> size) {
-        size_t new_size = array_growth_factor * array -> size;
-        void ** new_elements = realloc(array -> elements, new_size * sizeof *array -> elements);
+    if (array -> size == array -> capacity) {
+        size_t new_capacity = array_growth_factor * array -> capacity;
+        void ** new_elements = realloc(array -> elements, new_capacity * sizeof *array -> elements);
         if (new_elements == NULL) {
             message = "Failed to allocate space for new elements.";
             goto exit;
         }
 
         array -> elements = new_elements;
-        array -> size = new_size;
+        array -> capacity = new_capacity;
     }
 
-    array -> elements[array -> count++] = element;
+    array -> elements[array -> size++] = element;
 
     return;
 

@@ -31,22 +31,22 @@ float stack_growth_factor = 1.75;
  *
  * @return      the newly created stack.
  */
-struct Stack * newStack(size_t initial_size) {
+struct Stack * newStack(size_t initial_capacity) {
     const char * message = "Initial stack size cannot be zero.";
-    if(initial_size == 0)
+    if(initial_capacity == 0)
         goto exit;
 
     struct Stack * stack = malloc(sizeof *stack);
     if (stack == NULL)
         return NULL;
 
-    stack -> elements = malloc(initial_size * sizeof *stack -> elements);
+    stack -> elements = malloc(initial_capacity * sizeof *stack -> elements);
     if (stack -> elements == NULL) {
         free(stack);
         return NULL;
     }
 
-    stack -> size = initial_size;
+    stack -> capacity = initial_capacity;
     stack -> top = 0;
 
     return stack;
@@ -135,16 +135,16 @@ void stackPush(struct Stack * const stack, void * element) {
         goto exit;
     }
 
-    if (stack -> top == stack -> size) {
-        size_t new_size = stack_growth_factor * stack -> size;
-        void ** new_elements = realloc(stack -> elements, new_size * sizeof *stack -> elements);
+    if (stack -> top == stack -> capacity) {
+        size_t new_capacity = stack_growth_factor * stack -> capacity;
+        void ** new_elements = realloc(stack -> elements, new_capacity * sizeof *stack -> elements);
         if (new_elements == NULL) {
             message = "Failed to allocated space for new elements.";
             goto exit;
         }
 
         stack -> elements = new_elements;
-        stack -> size = new_size;
+        stack -> capacity = new_capacity;
     }
 
     stack -> elements[stack -> top++] = element;

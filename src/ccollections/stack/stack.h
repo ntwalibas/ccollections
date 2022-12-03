@@ -25,7 +25,7 @@ extern float stack_growth_factor;
 
 struct Stack {
     void ** elements;
-    size_t size;
+    size_t capacity;
     size_t top;
 };
 
@@ -35,7 +35,7 @@ struct Stack {
  *
  * @return      the newly created stack.
  */
-struct Stack * newStack(size_t size);
+struct Stack * newStack(size_t capacity);
 
 
 /**
