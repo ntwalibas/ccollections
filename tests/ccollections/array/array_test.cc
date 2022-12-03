@@ -204,6 +204,8 @@ TEST_F(ArrayTest, arraySetTest) {
     arrayAppend(array, &value1);
     arraySet(array, 0, &value2);
     int * element = (int *) arrayGet(array, 0);
+    EXPECT_NE(element, & value1);
+    EXPECT_NE(* element, value1);
     EXPECT_EQ(element, & value2);
     EXPECT_EQ(* element, value2);
 
