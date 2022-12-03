@@ -50,6 +50,40 @@ TEST_F(ArrayTest, deleteArrayTest) {
     EXPECT_EQ(array, nullptr);
 }
 
+// resizeArray
+TEST_F(ArrayTest, resizeArrayTest) {
+    array = resizeArray(array, 20);
+    EXPECT_EQ(array -> capacity, 20);
+
+    // Check that a capacity less than or equal to the current capacity results in a failure
+    const char formatter1[] = "File: %s.\nOperation: resizeArray.\nMessage: %s\n";
+    const char file1[] = "src/ccollections/array/array.c";
+    const char message1[] = "The new capacity cannot less or equal to the existing capacity.";
+    
+    int size1 = snprintf(NULL, 0, formatter1, file1, message1);
+    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
+    snprintf(expected_message1, size1 + 1, formatter1, file1, message1);
+
+    EXPECT_DEATH(resizeArray(array, 20), expected_message1);
+
+    free(expected_message1);
+
+    // We delete the array, we should gracefully fail to check if it is empty, without running into null pointer accesses
+    deleteArray(&array);
+
+    const char formatter2[] = "File: %s.\nOperation: resizeArray.\nMessage: %s\n";
+    const char file2[] = "src/ccollections/array/array.c";
+    const char message2[] = "The parameter <array> cannot be NULL.";
+    
+    int size2 = snprintf(NULL, 0, formatter2, file2, message2);
+    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
+    snprintf(expected_message2, size2 + 1, formatter2, file2, message2);
+
+    EXPECT_DEATH(resizeArray(array, 20), expected_message2);
+
+    free(expected_message2);
+}
+
 // isArrayEmpty
 TEST_F(ArrayTest, isArrayEmptyTest) {
     // No elements have been added to the array, it should be empty

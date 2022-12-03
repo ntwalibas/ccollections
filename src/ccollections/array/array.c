@@ -76,6 +76,41 @@ void deleteArray(struct Array ** const array) {
 
 
 /**
+ * Resizes the given array to higher size.
+ *
+ * @param       array pointer to array to resize.
+ * @param       new_capacity the new capacity of the array.
+ *
+ * @return      the newly created array.
+ */
+struct Array * resizeArray(struct Array * const array, size_t new_capacity) {
+    const char * message = NULL;
+    if (array == NULL) {
+        message = "The parameter <array> cannot be NULL.";
+        goto exit;
+    }
+
+    if (new_capacity <= array -> capacity) {
+        message = "The new capacity cannot less or equal to the existing capacity.";
+        goto exit;
+    }
+
+    void ** new_elements = realloc(array -> elements, new_capacity * sizeof *array -> elements);
+    if (new_elements == NULL)
+        return NULL;
+
+    array -> elements = new_elements;
+    array -> capacity = new_capacity;
+
+    return array;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: resizeArray.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+/**
  * Check if the array is empty.
  *
  * @param       array pointer to the array which content to check.
