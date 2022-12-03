@@ -21,9 +21,12 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "../interfaces/interfaces.h"
+
 extern float array_growth_factor;
 
 struct Array {
+    struct Collection super;
     void ** elements;
     size_t capacity;
     size_t size;
@@ -94,6 +97,6 @@ void * arrayGet(struct Array const * const array, size_t index);
  * @param       index the index at which to write.
  * @param       element the element to write at the specified index.
  */
-void arraySet(struct Array const * const array, size_t index, void * element);
+void arraySet(struct Array * const array, size_t index, void * element);
 
 #endif

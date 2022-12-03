@@ -131,7 +131,7 @@ TEST_F(ArrayTest, arrayAppendTest) {
 // arrayGet
 TEST_F(ArrayTest, arrayGetTest) {
     // No elements have been added to the array, we should not be able to get elements
-    const char formatter1[] = "File: %s.\nOperation: arrayGet.\nMessage: %s\n";
+    const char formatter1[] = "File: %s.\nOperation: _arrayCollectionGet.\nMessage: %s\n";
     const char file1[] = "src/ccollections/array/array.c";
     const char message1[] = "The array is empty, cannot get elements.";
     
@@ -153,7 +153,7 @@ TEST_F(ArrayTest, arrayGetTest) {
 
 
     // Try to get an element beyond what's been added
-    const char formatter2[] = "File: %s.\nOperation: arrayGet.\nMessage: %s\n";
+    const char formatter2[] = "File: %s.\nOperation: _arrayCollectionGet.\nMessage: %s\n";
     const char file2[] = "src/ccollections/array/array.c";
     const char message2[] = "The index is out of bounds.";
     
@@ -169,7 +169,7 @@ TEST_F(ArrayTest, arrayGetTest) {
     // We delete the array, we should not be able to get the top element
     deleteArray(&array);
 
-    const char formatter3[] = "File: %s.\nOperation: arrayGet.\nMessage: %s\n";
+    const char formatter3[] = "File: %s.\nOperation: _arrayCollectionGet.\nMessage: %s\n";
     const char file3[] = "src/ccollections/array/array.c";
     const char message3[] = "The parameter <array> cannot be NULL.";
     
@@ -186,7 +186,7 @@ TEST_F(ArrayTest, arrayGetTest) {
 TEST_F(ArrayTest, arraySetTest) {
     // No elements have been added to the array, we should not be able to set elements
     int value1 = 1;
-    const char formatter1[] = "File: %s.\nOperation: arraySet.\nMessage: %s\n";
+    const char formatter1[] = "File: %s.\nOperation: _arrayCollectionSet.\nMessage: %s\n";
     const char file1[] = "src/ccollections/array/array.c";
     const char message1[] = "The array is empty, cannot set elements.";
     
@@ -211,7 +211,7 @@ TEST_F(ArrayTest, arraySetTest) {
 
 
     // Try to get an element beyond what's been added
-    const char formatter2[] = "File: %s.\nOperation: arraySet.\nMessage: %s\n";
+    const char formatter2[] = "File: %s.\nOperation: _arrayCollectionSet.\nMessage: %s\n";
     const char file2[] = "src/ccollections/array/array.c";
     const char message2[] = "The index is out of bounds.";
     
@@ -227,7 +227,7 @@ TEST_F(ArrayTest, arraySetTest) {
     // We delete the array, we should not be able to get the top element
     deleteArray(&array);
 
-    const char formatter3[] = "File: %s.\nOperation: arraySet.\nMessage: %s\n";
+    const char formatter3[] = "File: %s.\nOperation: _arrayCollectionSet.\nMessage: %s\n";
     const char file3[] = "src/ccollections/array/array.c";
     const char message3[] = "The parameter <array> cannot be NULL.";
     

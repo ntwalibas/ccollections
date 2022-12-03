@@ -23,6 +23,10 @@
 
 #include "array.h"
 
+static void * _arrayCollectionGet(struct Collection const * const collection, size_t index);
+static void _arrayCollectionSet(struct Collection * const collection, size_t index, void * element);
+static int _arrayCollectionCompare(struct Collection const * const collection, size_t index_1, size_t index_2);
+
 float array_growth_factor = 1.75;
 
 
@@ -46,6 +50,19 @@ struct Array * newArray(size_t initial_capacity) {
         return NULL;
     }
 
+    struct Indexable * indexable_vtable = malloc(sizeof *indexable_vtable);
+    indexable_vtable -> get = _arrayCollectionGet;
+    indexable_vtable -> set = _arrayCollectionSet;
+
+    struct Comparable * comparable_vtable = malloc(sizeof *comparable_vtable);
+    comparable_vtable -> compare = _arrayCollectionCompare;
+
+    struct Collection super = {
+        .indexable_vtable = indexable_vtable,
+        .comparable_vtable = comparable_vtable
+    };
+
+    array -> super = super;
     array -> capacity = initial_capacity;
     array -> size = 0;
 
@@ -69,6 +86,8 @@ void deleteArray(struct Array ** const array) {
     if (* array == NULL)
         return;
 
+    free((void *)(* array) -> super.indexable_vtable);
+    free((void *)(* array) -> super.comparable_vtable);
     free((* array) -> elements);
     free(* array);
     * array = NULL;
@@ -176,6 +195,11 @@ exit:
  * @return      the element at the specified index.
  */
 void * arrayGet(struct Array const * const array, size_t index) {
+    return _arrayCollectionGet((struct Collection const * const) array, index);
+}
+
+static void * _arrayCollectionGet(struct Collection const * const collection, size_t index) {
+    struct Array const * const array = (struct Array const * const) collection;
     char const * message = NULL;
     
     if (array == NULL) {
@@ -196,7 +220,7 @@ void * arrayGet(struct Array const * const array, size_t index) {
     return array -> elements[index];
 
 exit:
-    fprintf(stderr, "File: %s.\nOperation: arrayGet.\nMessage: %s\n", __FILE__, message);
+    fprintf(stderr, "File: %s.\nOperation: _arrayCollectionGet.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
@@ -208,9 +232,14 @@ exit:
  * @param       index the index at which to write.
  * @param       element the element to write at the specified index.
  */
-void arraySet(struct Array const * const array, size_t index, void * element) {
+void arraySet(struct Array * const array, size_t index, void * element) {
+    return _arrayCollectionSet((struct Collection * const) array, index, element);
+}
+
+static void _arrayCollectionSet(struct Collection * const collection, size_t index, void * element) {
+    struct Array * const array = (struct Array * const) collection;
     char const * message = NULL;
-    
+
     if (array == NULL) {
         message = "The parameter <array> cannot be NULL.";
         goto exit;
@@ -230,6 +259,38 @@ void arraySet(struct Array const * const array, size_t index, void * element) {
     return;
 
 exit:
-    fprintf(stderr, "File: %s.\nOperation: arraySet.\nMessage: %s\n", __FILE__, message);
+    fprintf(stderr, "File: %s.\nOperation: _arrayCollectionSet.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+static int _arrayCollectionCompare(struct Collection const * const collection, size_t index_1, size_t index_2) {
+    struct Array const * const array = (struct Array const * const) collection;
+    const char * message = NULL;
+
+    if (array == NULL) {
+        message = "The parameter <array> cannot be NULL.";
+        goto exit;
+    }
+
+    if (array -> size == 0) {
+        message = "The array is empty, cannot compare indexes.";
+        goto exit;
+    }
+
+    if (index_1 >= array -> size) {
+        message = "Index_1 is out of bounds.";
+        goto exit;
+    }
+
+    if (index_2 >= array -> size) {
+        message = "Index_2 is out of bounds.";
+        goto exit;
+    }
+
+    return (index_1 > index_2) - (index_1 < index_2);
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: _arrayCollectionCompare.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }

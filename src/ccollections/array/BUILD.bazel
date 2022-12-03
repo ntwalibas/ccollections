@@ -3,4 +3,5 @@ cc_library(
     srcs = ["array.c"],
     hdrs = ["array.h"],
     visibility = ["//tests/ccollections/array:__pkg__"],
+    deps = ["//src/ccollections/interfaces:interfaces"],
 )
