@@ -156,7 +156,8 @@ def clean(expunge: bool = typer.Option(False, "--expunge", "-e")):
             os.unlink(file)
 
     if expunge:
-        shutil.rmtree("release")
+        if os.path.isdir("release"):
+            shutil.rmtree("release")
 
 @app.command()
 def release(
