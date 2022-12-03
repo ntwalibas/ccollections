@@ -97,11 +97,21 @@ def about():
 
 
 @app.command()
-def build(verbose: bool = typer.Option(False, "--verbose", "-v")):
+def build(
+    verbose: bool = typer.Option(False, "--verbose", "-v"),
+    target: str = typer.Option(None, "--target", "-t")
+):
     """Runs Bazel to create output artifacts from targets specified in BUILD.bazel files."""
     number_of_failures = 0
 
-    for target in track(targets, description = "Building"):
+    if target is not None:
+        target = f"src/ccollections/{target}:{target}"
+        _targets = [target]
+    else:
+        global targets
+        _targets = targets
+
+    for target in track(_targets, description = "Building"):
         build_cmd = ["bazel", "build", f"//{target}"]
         number_of_failures += _run(
             build_cmd,
@@ -109,24 +119,31 @@ def build(verbose: bool = typer.Option(False, "--verbose", "-v")):
             f"Target {target} failed building. You can see the colorized output with `bazel build {target}`."
         )
     
-    print(f"Built {len(targets)} targets of which {number_of_failures} failed.")
+    print(f"Built {len(_targets)} targets of which {number_of_failures} failed.")
 
     return number_of_failures
 
 
 @app.command()
-def test():
+def test(target: str = typer.Option(None, "--target", "-t")):
     """Invokes Bazel to test the entire project."""
     number_of_failures = 0
 
-    for test in track(tests, description = "Testing"):
+    if target is not None:
+        test = f"//tests/ccollections/{target}:{target}_test"
+        _tests = [test]
+    else:
+        global tests
+        _tests = tests
+
+    for test in track(_tests, description = "Testing"):
         test_cmd = ["bazel", "test", "--test_output=all", test]
         number_of_failures += _run(
             test_cmd,
             True,
         )
     
-    print(f"Run {len(targets)} tests out of which {number_of_failures} failed.")
+    print(f"Ran {len(_tests)} tests out of which {number_of_failures} failed.")
 
     return number_of_failures
 
