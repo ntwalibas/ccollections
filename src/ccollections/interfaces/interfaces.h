@@ -25,7 +25,7 @@ struct Collection;
 
 struct Indexable {
     void * (* get)(struct Collection const * const collection, size_t index);
-    void * (* set)(struct Collection * const collection, size_t index, void * element);
+    void (* set)(struct Collection * const collection, size_t index, void * element);
 };
 
 
