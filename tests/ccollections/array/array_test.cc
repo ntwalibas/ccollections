@@ -49,3 +49,47 @@ TEST_F(ArrayTest, deleteArrayTest) {
     // Make sure the array is freed upon calling deleteArray
     EXPECT_EQ(array, nullptr);
 }
+
+// isArrayEmpty
+TEST_F(ArrayTest, isArrayEmptyTest) {
+    // No elements have been added to the array, it should be empty
+    EXPECT_EQ(isArrayEmpty(array), true);
+
+    // We delete the array, we should gracefully fail to check if it is empty, without running into null pointer accesses
+    deleteArray(&array);
+
+    const char formatter[] = "File: %s.\nOperation: isArrayEmpty.\nMessage: %s\n";
+    const char file[] = "src/ccollections/array/array.c";
+    const char message[] = "The parameter <array> cannot be NULL.";
+    
+    int size = snprintf(NULL, 0, formatter, file, message);
+    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
+    snprintf(expected_message, size + 1, formatter, file, message);
+
+    EXPECT_DEATH(isArrayEmpty(array), expected_message);
+
+    free(expected_message);
+}
+
+// arrayAppend
+TEST_F(ArrayTest, arrayAppendTest) {
+    // Append an element and verify that it was push
+    int value = 1;
+    arrayAppend(array, &value);
+    EXPECT_EQ(array -> count, 1);
+
+    // We delete the array, we should not be able to push onto it
+    deleteArray(&array);
+
+    const char formatter[] = "File: %s.\nOperation: arrayAppend.\nMessage: %s\n";
+    const char file[] = "src/ccollections/array/array.c";
+    const char message[] = "The parameter <array> cannot be NULL.";
+    
+    int size = snprintf(NULL, 0, formatter, file, message);
+    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
+    snprintf(expected_message, size + 1, formatter, file, message);
+
+    EXPECT_DEATH(arrayAppend(array, &value), expected_message);
+
+    free(expected_message);
+}

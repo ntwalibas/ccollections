@@ -55,4 +55,13 @@ void deleteArray(struct Array ** const array);
  */
 bool isArrayEmpty(struct Array const * const array);
 
+
+/**
+ * Appends an element at the end of the array.
+ *
+ * @param       array pointer to array to append an element to.
+ * @param       element pointer to the element to append to the array.
+ */
+void arrayAppend(struct Array * const array, void * element);
+
 #endif

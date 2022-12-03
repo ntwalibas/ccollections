@@ -93,3 +93,38 @@ exit:
     fprintf(stderr, "File: %s.\nOperation: isArrayEmpty.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
+
+
+/**
+ * Appends an element at the end of the array.
+ *
+ * @param       array pointer to array to append an element to.
+ * @param       element pointer to the element to append to the array.
+ */
+void arrayAppend(struct Array * const array, void * element) {
+    char const * message = NULL;
+    if (array == NULL) {
+        message = "The parameter <array> cannot be NULL.";
+        goto exit;
+    }
+
+    if (array -> count == array -> size) {
+        size_t new_size = array_growth_factor * array -> size;
+        void ** new_elements = realloc(array -> elements, new_size * sizeof *array -> elements);
+        if (new_elements == NULL) {
+            message = "Failed to allocate space for new elements.";
+            goto exit;
+        }
+
+        array -> elements = new_elements;
+        array -> size = new_size;
+    }
+
+    array -> elements[array -> count++] = element;
+
+    return;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: arrayAppend.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
