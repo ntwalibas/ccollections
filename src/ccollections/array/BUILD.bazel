@@ -1,0 +1,6 @@
+cc_library(
+    name = "array",
+    srcs = ["array.c"],
+    hdrs = ["array.h"],
+    visibility = ["//tests/ccollections/array:__pkg__"],
+)
