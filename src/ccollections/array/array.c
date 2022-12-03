@@ -85,6 +85,7 @@ void deleteArray(struct Array ** const array) {
  */
 struct Array * resizeArray(struct Array * const array, size_t new_capacity) {
     const char * message = NULL;
+    
     if (array == NULL) {
         message = "The parameter <array> cannot be NULL.";
         goto exit;
@@ -138,6 +139,7 @@ exit:
  */
 void arrayAppend(struct Array * const array, void * element) {
     char const * message = NULL;
+    
     if (array == NULL) {
         message = "The parameter <array> cannot be NULL.";
         goto exit;
@@ -161,5 +163,39 @@ void arrayAppend(struct Array * const array, void * element) {
 
 exit:
     fprintf(stderr, "File: %s.\nOperation: arrayAppend.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+/**
+ * Get the element at the specified index.
+ *
+ * @param       array pointer to array to use.
+ * @param       index the index at which to look.
+ *
+ * @return      the element at the specified index.
+ */
+void * arrayGet(struct Array const * const array, size_t index) {
+    char const * message = NULL;
+    
+    if (array == NULL) {
+        message = "The parameter <array> cannot be NULL.";
+        goto exit;
+    }
+
+    if (array -> size == 0) {
+        message = "The array is empty, cannot get elements.";
+        goto exit;
+    }
+
+    if (index >= array -> size) {
+        message = "The index is out of bounds.";
+        goto exit;
+    }
+
+    return array -> elements[index];
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: arrayGet.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }

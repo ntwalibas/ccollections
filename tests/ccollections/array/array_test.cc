@@ -127,3 +127,56 @@ TEST_F(ArrayTest, arrayAppendTest) {
 
     free(expected_message);
 }
+
+// arrayGet
+TEST_F(ArrayTest, arrayGetTest) {
+    // No elements have been added to the array, we should not be able to get elements
+    const char formatter1[] = "File: %s.\nOperation: arrayGet.\nMessage: %s\n";
+    const char file1[] = "src/ccollections/array/array.c";
+    const char message1[] = "The array is empty, cannot get elements.";
+    
+    int size1 = snprintf(NULL, 0, formatter1, file1, message1);
+    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
+    snprintf(expected_message1, size1 + 1, formatter1, file1, message1);
+
+    EXPECT_DEATH(arrayGet(array, 0), expected_message1);
+
+    free(expected_message1);
+
+
+    // Add an element to the array and verify that we get it at index 0
+    int value = 1;
+    arrayAppend(array, &value);
+    int * element = (int *) arrayGet(array, 0);
+    EXPECT_EQ(element, & value);
+    EXPECT_EQ(* element, value);
+
+    // Try to get an element beyond what's been added
+    const char formatter2[] = "File: %s.\nOperation: arrayGet.\nMessage: %s\n";
+    const char file2[] = "src/ccollections/array/array.c";
+    const char message2[] = "The index is out of bounds.";
+    
+    int size2 = snprintf(NULL, 0, formatter2, file2, message2);
+    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
+    snprintf(expected_message2, size2 + 1, formatter2, file2, message2);
+
+    EXPECT_DEATH(arrayGet(array, 1), expected_message2);
+
+    free(expected_message2);
+
+
+    // We delete the array, we should not be able to get the top element
+    deleteArray(&array);
+
+    const char formatter3[] = "File: %s.\nOperation: arrayGet.\nMessage: %s\n";
+    const char file3[] = "src/ccollections/array/array.c";
+    const char message3[] = "The parameter <array> cannot be NULL.";
+    
+    int size3 = snprintf(NULL, 0, formatter3, file3, message3);
+    char * expected_message3 = (char *) malloc((size3 + 1) * sizeof(char));
+    snprintf(expected_message3, size3 + 1, formatter3, file3, message3);
+
+    EXPECT_DEATH(arrayGet(array, 0), expected_message3);
+
+    free(expected_message3);
+}

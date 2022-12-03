@@ -75,4 +75,15 @@ bool isArrayEmpty(struct Array const * const array);
  */
 void arrayAppend(struct Array * const array, void * element);
 
+
+/**
+ * Get the element at the specified index.
+ *
+ * @param       array pointer to array to use.
+ * @param       index the index at which to look.
+ *
+ * @return      the element at the specified index.
+ */
+void * arrayGet(struct Array const * const array, size_t index);
+
 #endif
