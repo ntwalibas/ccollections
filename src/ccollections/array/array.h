@@ -21,12 +21,13 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+
 #include "../interfaces/interfaces.h"
 
 extern float array_growth_factor;
 
 struct Array {
-    struct Collection super;
+    struct Collection collection;
     void ** elements;
     size_t capacity;
     size_t size;

@@ -51,14 +51,14 @@ struct Array * newArray(size_t initial_capacity) {
         return NULL;
     }
 
-    struct Collection super = {
+    struct Collection collection = {
         .get = _arrayCollectionGet,
         .set = _arrayCollectionSet,
         .atEnd = _arrayCollectionAtEnd,
         .compare = _arrayCollectionCompare,
     };
 
-    array -> super = super;
+    array -> collection = collection;
     array -> capacity = initial_capacity;
     array -> size = 0;
 
@@ -189,7 +189,7 @@ exit:
  * @return      the element at the specified index.
  */
 void * arrayGet(struct Array const * const array, size_t index) {
-    return _arrayCollectionGet((struct Collection const * const) array, index);
+    return _arrayCollectionGet(&array -> collection, index);
 }
 
 static void * _arrayCollectionGet(struct Collection const * const collection, size_t index) {
@@ -227,7 +227,7 @@ exit:
  * @param       element the element to write at the specified index.
  */
 void arraySet(struct Array * const array, size_t index, void * element) {
-    return _arrayCollectionSet((struct Collection * const) array, index, element);
+    return _arrayCollectionSet(&array -> collection, index, element);
 }
 
 static void _arrayCollectionSet(struct Collection * const collection, size_t index, void * element) {
