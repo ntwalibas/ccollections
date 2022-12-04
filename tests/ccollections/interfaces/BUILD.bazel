@@ -1,0 +1,9 @@
+cc_test(
+  name = "interfaces_test",
+  size = "small",
+  srcs = ["interfaces_test.cc"],
+  deps = [
+    "@com_google_googletest//:gtest_main",
+    "//src/ccollections/interfaces:interfaces",
+  ],
+)
