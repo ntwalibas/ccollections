@@ -2,6 +2,6 @@ cc_library(
     name = "array",
     srcs = ["array.c"],
     hdrs = ["array.h"],
-    visibility = ["//tests/ccollections/array:__pkg__"],
+    visibility = ["//visibility:public"],
     deps = ["//src/ccollections/interfaces:interfaces"],
 )
