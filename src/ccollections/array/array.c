@@ -150,7 +150,7 @@ exit:
  * @param       array pointer to array to append an element to.
  * @param       element pointer to the element to append to the array.
  */
-void arrayAppend(struct Array * const array, void * element) {
+void arrayPushBack(struct Array * const array, void * element) {
     char const * message = NULL;
     
     if (array == NULL) {
@@ -175,7 +175,7 @@ void arrayAppend(struct Array * const array, void * element) {
     return;
 
 exit:
-    fprintf(stderr, "File: %s.\nOperation: arrayAppend.\nMessage: %s\n", __FILE__, message);
+    fprintf(stderr, "File: %s.\nOperation: arrayPushBack.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 

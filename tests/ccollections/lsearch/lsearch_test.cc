@@ -25,7 +25,7 @@ class LSearchTest: public ::testing::Test {
             elements = (int *) malloc(10 * sizeof(*elements));
             for(int i = 0; i < 10; i++) {
                 elements[i] = i + 1;
-                arrayAppend(array, &elements[i]);
+                arrayPushBack(array, &elements[i]);
             }
         }
 

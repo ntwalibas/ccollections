@@ -105,17 +105,17 @@ TEST_F(ArrayTest, isArrayEmptyTest) {
     free(expected_message);
 }
 
-// arrayAppend
-TEST_F(ArrayTest, arrayAppendTest) {
+// arrayPushBack
+TEST_F(ArrayTest, arrayPushBackTest) {
     // Append an element and verify that it was push
     int value = 1;
-    arrayAppend(array, &value);
+    arrayPushBack(array, &value);
     EXPECT_EQ(array -> size, 1);
 
     // We delete the array, we should not be able to push onto it
     deleteArray(&array);
 
-    const char formatter[] = "File: %s.\nOperation: arrayAppend.\nMessage: %s\n";
+    const char formatter[] = "File: %s.\nOperation: arrayPushBack.\nMessage: %s\n";
     const char file[] = "src/ccollections/array/array.c";
     const char message[] = "The parameter <array> cannot be NULL.";
     
@@ -123,7 +123,7 @@ TEST_F(ArrayTest, arrayAppendTest) {
     char * expected_message = (char *) malloc((size + 1) * sizeof(char));
     snprintf(expected_message, size + 1, formatter, file, message);
 
-    EXPECT_DEATH(arrayAppend(array, &value), expected_message);
+    EXPECT_DEATH(arrayPushBack(array, &value), expected_message);
 
     free(expected_message);
 }
@@ -146,7 +146,7 @@ TEST_F(ArrayTest, arrayGetTest) {
 
     // Add an element to the array and verify that we get it at index 0
     int value = 1;
-    arrayAppend(array, &value);
+    arrayPushBack(array, &value);
     int * element = (int *) arrayGet(array, 0);
     EXPECT_EQ(element, & value);
     EXPECT_EQ(* element, value);
@@ -201,7 +201,7 @@ TEST_F(ArrayTest, arraySetTest) {
 
     // Add an element to the array and verify that we set it at index 0
     int value2 = 2;
-    arrayAppend(array, &value1);
+    arrayPushBack(array, &value1);
     arraySet(array, 0, &value2);
     int * element = (int *) arrayGet(array, 0);
     EXPECT_NE(element, & value1);

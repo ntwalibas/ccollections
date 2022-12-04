@@ -77,7 +77,7 @@ bool isArrayEmpty(struct Array const * const array);
  * @param       array pointer to array to append an element to.
  * @param       element pointer to the element to append to the array.
  */
-void arrayAppend(struct Array * const array, void * element);
+void arrayPushBack(struct Array * const array, void * element);
 
 
 /**
