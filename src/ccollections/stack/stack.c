@@ -53,8 +53,7 @@ struct Stack * newStack(size_t initial_capacity) {
         .compare = NULL,
     };
 
-    array -> collection = collection;
-
+    stack -> collection = collection;
     stack -> capacity = initial_capacity;
     stack -> top = 0;
 

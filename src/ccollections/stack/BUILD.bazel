@@ -3,4 +3,5 @@ cc_library(
     srcs = ["stack.c"],
     hdrs = ["stack.h"],
     visibility = ["//visibility:public"],
+    deps = ["//src/ccollections/interfaces:interfaces"],
 )
