@@ -89,12 +89,12 @@ void deleteArray(struct Array ** const array) {
 
 
 /**
- * Resizes the given array to higher size.
+ * Resizes the given array to higher capacity.
  *
  * @param       array pointer to array to resize.
  * @param       new_capacity the new capacity of the array.
  *
- * @return      the newly created array.
+ * @return      the newly resized array.
  */
 struct Array * resizeArray(struct Array * const array, size_t new_capacity) {
     const char * message = NULL;
