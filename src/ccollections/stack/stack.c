@@ -46,6 +46,15 @@ struct Stack * newStack(size_t initial_capacity) {
         return NULL;
     }
 
+    struct Collection collection = {
+        .get = NULL,
+        .set = NULL,
+        .atEnd = NULL,
+        .compare = NULL,
+    };
+
+    array -> collection = collection;
+
     stack -> capacity = initial_capacity;
     stack -> top = 0;
 

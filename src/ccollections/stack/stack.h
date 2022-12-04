@@ -21,9 +21,13 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "../interfaces/interfaces.h"
+
+
 extern float stack_growth_factor;
 
 struct Stack {
+    struct Collection collection;
     void ** elements;
     size_t capacity;
     size_t top;
