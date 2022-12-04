@@ -17,6 +17,7 @@
 
 
 #include <stddef.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 #include "lsearch.h"
@@ -37,22 +38,25 @@ int lsearch(struct Collection const * const collection, void const * const needl
         message = "The parameter <collection> cannot be NULL.";
         goto exit;
     }
-    
-    if (collection -> indexable_vptr == NULL) {
-        message = "The collection is not indexable, and therefore is not searchable.";
-        goto exit;
-    }
 
-    if (collection -> indexable_vptr -> get == NULL) {
+    if (collection -> get == NULL) {
         message = "The collection doesn't provide a mechanism for obtain elements by index/key, and therefore unsearchable.";
         goto exit;
     }
 
+    if (collection -> atEnd == NULL) {
+        message = "The collection doesn't provide a mechanism for checking if one is at the end of the content it holds, and therefore unsearchable.";
+        goto exit;
+    }
+
     size_t index = 0;
-    while (collection -> atEnd(index) == false) {
-        void * element = collection -> indexable_vptr -> get(collection, index);
+    while (collection -> atEnd(collection, index) == false) {
+        void * element = collection -> get(collection, index);
+        
         if (compare(element, needle) == 0)
             return index;
+        
+        index++;
     }
 
     return -1;
