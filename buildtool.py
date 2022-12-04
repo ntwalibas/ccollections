@@ -214,13 +214,13 @@ def release(
     release_name = "{}-{}-{}".format(libname, ops.lower() if ops else uname.system.lower(), arch.lower() if arch else uname.machine.lower())
 
     # Test the project and if tests fail, we don't continue further
-    if test() > 0:
+    if test(None) > 0:
         exit(1)
     
     print()
 
     # Build the project and if building fails, we don't continue
-    if build() > 0:
+    if build(False, None) > 0:
         exit(1)
     
     print()
