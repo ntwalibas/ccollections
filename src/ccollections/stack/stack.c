@@ -31,7 +31,7 @@ float stack_growth_factor = 1.75;
  *
  * @return      the newly created stack.
  */
-struct Stack * newStack(size_t initial_capacity) {
+struct Stack * newStack(unsigned initial_capacity) {
     const char * message = "Initial stack size cannot be zero.";
     if(initial_capacity == 0)
         goto exit;
@@ -145,7 +145,7 @@ void stackPush(struct Stack * const stack, void * element) {
     }
 
     if (stack -> top == stack -> capacity) {
-        size_t new_capacity = stack_growth_factor * stack -> capacity;
+        unsigned new_capacity = stack_growth_factor * stack -> capacity;
         void ** new_elements = realloc(stack -> elements, new_capacity * sizeof *stack -> elements);
         if (new_elements == NULL) {
             message = "Failed to allocated space for new elements.";

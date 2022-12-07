@@ -29,8 +29,8 @@ extern float array_growth_factor;
 struct Array {
     struct Collection collection;
     void ** elements;
-    size_t capacity;
-    size_t size;
+    unsigned capacity;
+    unsigned size;
 };
 
 
@@ -39,7 +39,7 @@ struct Array {
  *
  * @return      the newly created array.
  */
-struct Array * newArray(size_t initial_capacity);
+struct Array * newArray(unsigned initial_capacity);
 
 
 /**
@@ -58,7 +58,7 @@ void deleteArray(struct Array ** const array);
  *
  * @return      the newly resized array.
  */
-struct Array * resizeArray(struct Array * const array, size_t new_capacity);
+struct Array * resizeArray(struct Array * const array, unsigned new_capacity);
 
 
 /**
@@ -88,7 +88,7 @@ void arrayPushBack(struct Array * const array, void * element);
  *
  * @return      the element at the specified index.
  */
-void * arrayGet(struct Array const * const array, size_t index);
+void * arrayGet(struct Array const * const array, unsigned index);
 
 
 /**
@@ -98,6 +98,6 @@ void * arrayGet(struct Array const * const array, size_t index);
  * @param       index the index at which to write.
  * @param       element the element to write at the specified index.
  */
-void arraySet(struct Array * const array, size_t index, void * element);
+void arraySet(struct Array * const array, unsigned index, void * element);
 
 #endif

@@ -23,9 +23,9 @@
 
 #include "array.h"
 
-static void * _arrayCollectionGet(struct Collection const * const collection, size_t index);
-static void _arrayCollectionSet(struct Collection * const collection, size_t index, void * element);
-static bool _arrayCollectionAtEnd(struct Collection const * const collection, size_t index);
+static void * _arrayCollectionGet(struct Collection const * const collection, unsigned index);
+static void _arrayCollectionSet(struct Collection * const collection, unsigned index, void * element);
+static bool _arrayCollectionAtEnd(struct Collection const * const collection, unsigned index);
 
 float array_growth_factor = 1.75;
 
@@ -35,7 +35,7 @@ float array_growth_factor = 1.75;
  *
  * @return      the newly created array.
  */
-struct Array * newArray(size_t initial_capacity) {
+struct Array * newArray(unsigned initial_capacity) {
     const char * message = "Initial array capacity cannot be zero.";
     if(initial_capacity == 0)
         goto exit;
@@ -94,7 +94,7 @@ void deleteArray(struct Array ** const array) {
  *
  * @return      the newly resized array.
  */
-struct Array * resizeArray(struct Array * const array, size_t new_capacity) {
+struct Array * resizeArray(struct Array * const array, unsigned new_capacity) {
     const char * message = NULL;
     
     if (array == NULL) {
@@ -157,7 +157,7 @@ void arrayPushBack(struct Array * const array, void * element) {
     }
 
     if (array -> size == array -> capacity) {
-        size_t new_capacity = array_growth_factor * array -> capacity;
+        unsigned new_capacity = array_growth_factor * array -> capacity;
         void ** new_elements = realloc(array -> elements, new_capacity * sizeof *array -> elements);
         if (new_elements == NULL) {
             message = "Failed to allocate space for new elements.";
@@ -186,11 +186,11 @@ exit:
  *
  * @return      the element at the specified index.
  */
-void * arrayGet(struct Array const * const array, size_t index) {
+void * arrayGet(struct Array const * const array, unsigned index) {
     return _arrayCollectionGet(&array -> collection, index);
 }
 
-static void * _arrayCollectionGet(struct Collection const * const collection, size_t index) {
+static void * _arrayCollectionGet(struct Collection const * const collection, unsigned index) {
     struct Array const * const array = (struct Array const * const) collection;
     char const * message = NULL;
     
@@ -224,11 +224,11 @@ exit:
  * @param       index the index at which to write.
  * @param       element the element to write at the specified index.
  */
-void arraySet(struct Array * const array, size_t index, void * element) {
+void arraySet(struct Array * const array, unsigned index, void * element) {
     return _arrayCollectionSet(&array -> collection, index, element);
 }
 
-static void _arrayCollectionSet(struct Collection * const collection, size_t index, void * element) {
+static void _arrayCollectionSet(struct Collection * const collection, unsigned index, void * element) {
     struct Array * const array = (struct Array * const) collection;
     char const * message = NULL;
 
@@ -256,7 +256,7 @@ exit:
 }
 
 
-static bool _arrayCollectionAtEnd(struct Collection const * const collection, size_t index) {
+static bool _arrayCollectionAtEnd(struct Collection const * const collection, unsigned index) {
     struct Array const * const array = (struct Array const * const) collection;
     const char * message = NULL;
 

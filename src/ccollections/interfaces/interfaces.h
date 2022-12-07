@@ -22,9 +22,9 @@
 #include <stddef.h>
 
 struct Collection {
-    void * (* get)(struct Collection const * const collection, size_t index);
-    void (* set)(struct Collection * const collection, size_t index, void * element);
-    bool (* atEnd)(struct Collection const * const collection, size_t index);
+    void * (* get)(struct Collection const * const collection, unsigned index);
+    void (* set)(struct Collection * const collection, unsigned index, void * element);
+    bool (* atEnd)(struct Collection const * const collection, unsigned index);
 };
 
 typedef int (* Comparator)(void const * a, void const * b);
