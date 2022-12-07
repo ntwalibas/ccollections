@@ -1,7 +1,0 @@
-cc_library(
-    name = "lsearch",
-    srcs = ["lsearch.c"],
-    hdrs = ["lsearch.h"],
-    visibility = ["//tests/ccollections/lsearch:__pkg__"],
-    deps = ["//src/ccollections/interfaces:interfaces"],
-)
