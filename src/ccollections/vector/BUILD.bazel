@@ -1,7 +1,7 @@
 cc_library(
-    name = "array",
-    srcs = ["array.c"],
-    hdrs = ["array.h"],
+    name = "vector",
+    srcs = ["vector.c"],
+    hdrs = ["vector.h"],
     visibility = ["//visibility:public"],
     deps = ["//src/ccollections/interfaces:interfaces"],
 )
