@@ -67,7 +67,7 @@ struct Deque * newDeque(unsigned capacity) {
     struct Collection collection = {
         .get = _dequeCollectionGet,
         .set = _dequeCollectionSet,
-        .atEnd = NULL,
+        .atEnd = _dequeCollectionAtEnd,
     };
 
     if (capacity == 0) {
@@ -501,6 +501,28 @@ static void _dequeCollectionSet(struct Collection * const collection, size_t ind
 
 exit:
     fprintf(stderr, "File: %s.\nOperation: dequeSet.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+static bool _dequeCollectionAtEnd(struct Collection const * const collection, size_t index) {
+    struct Deque const * const deque = (struct Deque const * const) collection;
+    const char * message = NULL;
+
+    if (deque == NULL) {
+        message = "The parameter <deque> cannot be NULL.";
+        goto exit;
+    }
+
+    if (deque -> size == 0) {
+        message = "The deque is empty, cannot check if at end.";
+        goto exit;
+    }
+
+    return index >= deque -> size;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: _dequeCollectionAtEnd.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
