@@ -42,8 +42,9 @@
  */
 
 
-static void * _dequeCollectionGet(struct Collection * const collection, size_t index);
-static void _dequeCollectionSet(struct Collection * const collection, size_t index, void * element);
+static void * _dequeCollectionGet(struct Collection * const collection, unsigned index);
+static void _dequeCollectionSet(struct Collection * const collection, unsigned index, void * element);
+static void _dequeCollectionAtEnd(struct Collection * const collection, unsigned index, void * element);
 
 static void * newBuffer(unsigned capacity);
 static void deleteBuffer(struct Buffer * buffer);
@@ -441,7 +442,7 @@ void * dequeGet(struct Deque * const deque, unsigned index) {
     return _dequeCollectionGet(&deque -> collection, index);
 }
 
-static void * _dequeCollectionGet(struct Collection * const collection, size_t index) {
+static void * _dequeCollectionGet(struct Collection * const collection, unsigned index) {
     struct Deque const * const deque = (struct Deque const * const) collection;
     char const * message = NULL;
 
@@ -475,7 +476,7 @@ void dequeSet(struct Deque * const deque, unsigned index, void * element) {
     _dequeCollectionSet(&deque -> collection, index, element);
 }
 
-static void _dequeCollectionSet(struct Collection * const collection, size_t index, void * element) {
+static void _dequeCollectionSet(struct Collection * const collection, unsigned index, void * element) {
     struct Deque const * const deque = (struct Deque const * const) collection;
     char const * message = NULL;
 
@@ -505,7 +506,7 @@ exit:
 }
 
 
-static bool _dequeCollectionAtEnd(struct Collection const * const collection, size_t index) {
+static bool _dequeCollectionAtEnd(struct Collection const * const collection, unsigned index) {
     struct Deque const * const deque = (struct Deque const * const) collection;
     const char * message = NULL;
 
