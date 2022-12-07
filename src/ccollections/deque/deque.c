@@ -44,7 +44,7 @@
 
 static void * _dequeCollectionGet(struct Collection * const collection, unsigned index);
 static void _dequeCollectionSet(struct Collection * const collection, unsigned index, void * element);
-static void _dequeCollectionAtEnd(struct Collection * const collection, unsigned index, void * element);
+static bool _dequeCollectionAtEnd(struct Collection const * const collection, unsigned index);
 
 static void * newBuffer(unsigned capacity);
 static void deleteBuffer(struct Buffer * buffer);
