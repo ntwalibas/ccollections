@@ -391,7 +391,7 @@ exit:
  *
  * @return      the element at the back of the deque.
  */
-void * dequePeekBack(struct Deque * const deque) {
+void * dequePeekBack(struct Deque const * const deque) {
     char const * message = "The parameter <deque> cannot be NULL.";
     if (deque == NULL)
         goto exit;
@@ -414,7 +414,7 @@ exit:
  *
  * @return      the element at the front of the deque.
  */
-void * dequePeekFront(struct Deque * const deque) {
+void * dequePeekFront(struct Deque const * const deque) {
     char const * message = "The parameter <deque> cannot be NULL.";
     if (deque == NULL)
         goto exit;
@@ -525,7 +525,6 @@ exit:
     fprintf(stderr, "File: %s.\nOperation: _dequeCollectionAtEnd.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
-
 
 
 /*
