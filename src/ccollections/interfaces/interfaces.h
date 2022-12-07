@@ -25,7 +25,6 @@ struct Collection {
     void * (* get)(struct Collection const * const collection, size_t index);
     void (* set)(struct Collection * const collection, size_t index, void * element);
     bool (* atEnd)(struct Collection const * const collection, size_t index);
-    int (* compare)(struct Collection const * const collection, size_t index_1, size_t index_2);
 };
 
 typedef int (* Comparator)(void const * a, void const * b);

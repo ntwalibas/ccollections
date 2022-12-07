@@ -50,7 +50,6 @@ struct Stack * newStack(size_t initial_capacity) {
         .get = NULL,
         .set = NULL,
         .atEnd = NULL,
-        .compare = NULL,
     };
 
     stack -> collection = collection;

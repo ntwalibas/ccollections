@@ -65,7 +65,6 @@ struct Deque * newDeque(unsigned capacity) {
         .get = NULL,
         .set = NULL,
         .atEnd = NULL,
-        .compare = NULL,
     };
 
     if (capacity == 0) {

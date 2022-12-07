@@ -26,7 +26,6 @@
 static void * _arrayCollectionGet(struct Collection const * const collection, size_t index);
 static void _arrayCollectionSet(struct Collection * const collection, size_t index, void * element);
 static bool _arrayCollectionAtEnd(struct Collection const * const collection, size_t index);
-static int _arrayCollectionCompare(struct Collection const * const collection, size_t index_1, size_t index_2);
 
 float array_growth_factor = 1.75;
 
@@ -55,7 +54,6 @@ struct Array * newArray(size_t initial_capacity) {
         .get = _arrayCollectionGet,
         .set = _arrayCollectionSet,
         .atEnd = _arrayCollectionAtEnd,
-        .compare = _arrayCollectionCompare,
     };
 
     array -> collection = collection;
@@ -254,38 +252,6 @@ static void _arrayCollectionSet(struct Collection * const collection, size_t ind
 
 exit:
     fprintf(stderr, "File: %s.\nOperation: _arrayCollectionSet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
-}
-
-
-static int _arrayCollectionCompare(struct Collection const * const collection, size_t index_1, size_t index_2) {
-    struct Array const * const array = (struct Array const * const) collection;
-    const char * message = NULL;
-
-    if (array == NULL) {
-        message = "The parameter <array> cannot be NULL.";
-        goto exit;
-    }
-
-    if (array -> size == 0) {
-        message = "The array is empty, cannot compare indexes.";
-        goto exit;
-    }
-
-    if (index_1 >= array -> size) {
-        message = "Index_1 is out of bounds.";
-        goto exit;
-    }
-
-    if (index_2 >= array -> size) {
-        message = "Index_2 is out of bounds.";
-        goto exit;
-    }
-
-    return (index_1 > index_2) - (index_1 < index_2);
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _arrayCollectionCompare.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
