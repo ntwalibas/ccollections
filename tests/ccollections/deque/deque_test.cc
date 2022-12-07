@@ -286,23 +286,23 @@ TEST_F(DequeTest, dequePopFrontTest) {
     free(expected_message);
 }
 
-// dequePeekBack
-TEST_F(DequeTest, dequePeekBackTest) {
+// dequeBack
+TEST_F(DequeTest, dequeBackTest) {
     // The deque is empty, we should expect NULL
-    EXPECT_EQ(dequePeekBack(deque), nullptr);
+    EXPECT_EQ(dequeBack(deque), nullptr);
 
     // With elements pushed
     int values[] = {1, 2};
     dequePushBack(deque, &values[0]);
     dequePushFront(deque, &values[1]);
 
-    EXPECT_EQ(*((int *)(dequePeekBack(deque))), 1);
+    EXPECT_EQ(*((int *)(dequeBack(deque))), 1);
 
 
     // We delete the deque, we should not be able to pop from it
     deleteDeque(&deque, nullptr);
 
-    const char formatter[] = "File: %s.\nOperation: dequePeekBack.\nMessage: %s\n";
+    const char formatter[] = "File: %s.\nOperation: dequeBack.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
     const char message[] = "The parameter <deque> cannot be NULL.";
 
@@ -310,28 +310,28 @@ TEST_F(DequeTest, dequePeekBackTest) {
     char * expected_message = (char *) malloc((size + 1) * sizeof(char));
     snprintf(expected_message, size + 1, formatter, file, message);
 
-    EXPECT_DEATH(dequePeekBack(deque), expected_message);
+    EXPECT_DEATH(dequeBack(deque), expected_message);
 
     free(expected_message);
 }
 
-// dequePeekFront
-TEST_F(DequeTest, dequePeekFrontTest) {
+// dequeFront
+TEST_F(DequeTest, dequeFrontTest) {
     // The deque is empty, we should expect NULL
-    EXPECT_EQ(dequePeekFront(deque), nullptr);
+    EXPECT_EQ(dequeFront(deque), nullptr);
 
     // With elements pushed
     int values[] = {1, 2};
     dequePushFront(deque, &values[0]);
     dequePushFront(deque, &values[1]);
 
-    EXPECT_EQ(*((int *)(dequePeekFront(deque))), 2);
+    EXPECT_EQ(*((int *)(dequeFront(deque))), 2);
 
 
     // We delete the deque, we should not be able to pop from it
     deleteDeque(&deque, nullptr);
 
-    const char formatter[] = "File: %s.\nOperation: dequePeekFront.\nMessage: %s\n";
+    const char formatter[] = "File: %s.\nOperation: dequeFront.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
     const char message[] = "The parameter <deque> cannot be NULL.";
 
@@ -339,7 +339,7 @@ TEST_F(DequeTest, dequePeekFrontTest) {
     char * expected_message = (char *) malloc((size + 1) * sizeof(char));
     snprintf(expected_message, size + 1, formatter, file, message);
 
-    EXPECT_DEATH(dequePeekFront(deque), expected_message);
+    EXPECT_DEATH(dequeFront(deque), expected_message);
 
     free(expected_message);
 }

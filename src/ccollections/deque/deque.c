@@ -399,7 +399,7 @@ exit:
  *
  * @return      the element at the back of the deque.
  */
-void * dequePeekBack(struct Deque const * const deque) {
+void * dequeBack(struct Deque const * const deque) {
     char const * message = "The parameter <deque> cannot be NULL.";
     if (deque == NULL)
         goto exit;
@@ -410,7 +410,7 @@ void * dequePeekBack(struct Deque const * const deque) {
     return ((void **) bufferGet(deque -> buffer, deque -> buffer -> size - 1))[deque -> back];
 
 exit:
-    fprintf(stderr, "File: %s.\nOperation: dequePeekBack.\nMessage: %s\n", __FILE__, message);
+    fprintf(stderr, "File: %s.\nOperation: dequeBack.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
@@ -422,7 +422,7 @@ exit:
  *
  * @return      the element at the front of the deque.
  */
-void * dequePeekFront(struct Deque const * const deque) {
+void * dequeFront(struct Deque const * const deque) {
     char const * message = "The parameter <deque> cannot be NULL.";
     if (deque == NULL)
         goto exit;
@@ -433,7 +433,7 @@ void * dequePeekFront(struct Deque const * const deque) {
     return ((void **) bufferGet(deque -> buffer, 0))[deque -> front];
 
 exit:
-    fprintf(stderr, "File: %s.\nOperation: dequePeekFront.\nMessage: %s\n", __FILE__, message);
+    fprintf(stderr, "File: %s.\nOperation: dequeFront.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 

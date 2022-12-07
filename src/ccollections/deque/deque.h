@@ -124,7 +124,7 @@ void * dequePopFront(struct Deque * const deque);
  *
  * @return      the element at the back of the deque.
  */
-void * dequePeekBack(struct Deque const * const deque);
+void * dequeBack(struct Deque const * const deque);
 
 
 /**
@@ -134,7 +134,7 @@ void * dequePeekBack(struct Deque const * const deque);
  *
  * @return      the element at the front of the deque.
  */
-void * dequePeekFront(struct Deque const * const deque);
+void * dequeFront(struct Deque const * const deque);
 
 
 /**
