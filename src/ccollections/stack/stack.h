@@ -47,7 +47,7 @@ struct Stack * newStack(unsigned capacity);
  *
  * @param       stack pointer to memory occupied by the stack.
  */
-void deleteStack(struct Stack ** const stack);
+void deleteStack(struct Stack ** const stack, CDeleter deleter);
 
 
 /**

@@ -14,7 +14,7 @@ class StackTest: public ::testing::Test {
         }
 
         void TearDown() override {
-            deleteStack(&stack);
+            deleteStack(&stack, nullptr);
         }
     
         struct Stack * stack;
@@ -44,7 +44,7 @@ TEST_F(StackTest, newStackTest) {
 
 // deleteStack
 TEST_F(StackTest, deleteStackTest) {
-    deleteStack(&stack);
+    deleteStack(&stack, nullptr);
 
     // Make sure the stack is freed upon calling deleteStack
     EXPECT_EQ(stack, nullptr);
@@ -56,7 +56,7 @@ TEST_F(StackTest, isStackEmptyTest) {
     EXPECT_EQ(isStackEmpty(stack), true);
 
     // We delete the stack, we should gracefully fail to check if it is empty, without running into null pointer accesses
-    deleteStack(&stack);
+    deleteStack(&stack, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: isStackEmpty.\nMessage: %s\n";
     const char file[] = "src/ccollections/stack/stack.c";
@@ -95,7 +95,7 @@ TEST_F(StackTest, stackTopTest) {
     EXPECT_EQ(* element, value);
 
     // We delete the stack, we should not be able to get the top element
-    deleteStack(&stack);
+    deleteStack(&stack, nullptr);
 
     const char formatter2[] = "File: %s.\nOperation: stackTop.\nMessage: %s\n";
     const char file2[] = "src/ccollections/stack/stack.c";
@@ -118,7 +118,7 @@ TEST_F(StackTest, stackPushTest) {
     EXPECT_EQ(stack -> top, 1);
 
     // We delete the stack, we should not be able to push onto it
-    deleteStack(&stack);
+    deleteStack(&stack, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: stackPush.\nMessage: %s\n";
     const char file[] = "src/ccollections/stack/stack.c";
@@ -156,7 +156,7 @@ TEST_F(StackTest, stackPopTest) {
     EXPECT_EQ(stack -> top, 0);
 
     // We delete the stack, we should not be able to pop the top element
-    deleteStack(&stack);
+    deleteStack(&stack, nullptr);
 
     const char formatter2[] = "File: %s.\nOperation: stackPop.\nMessage: %s\n";
     const char file2[] = "src/ccollections/stack/stack.c";

@@ -69,12 +69,19 @@ exit:
  *
  * @param       stack pointer to memory occupied by the stack.
  */
-void deleteStack(struct Stack ** const stack) {
+void deleteStack(struct Stack ** const stack, CDeleter deleter) {
     if (stack == NULL)
         return;
 
     if (* stack == NULL)
         return;
+
+    if (deleter != NULL) {
+        while (isStackEmpty(stack) != false) {
+            void * element = stackPop(stack);
+            deleter(& element);
+        }
+    }
 
     free((* stack) -> elements);
     free(* stack);
