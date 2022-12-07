@@ -42,6 +42,9 @@
  */
 
 
+static void * _dequeCollectionGet(struct Collection * const collection, size_t index);
+static void _dequeCollectionSet(struct Collection * const collection, size_t index, void * element);
+
 static void * newBuffer(unsigned capacity);
 static void deleteBuffer(struct Buffer * buffer);
 static bool bufferPushBack(struct Buffer * const buffer, void * content);
@@ -62,8 +65,8 @@ struct Deque * newDeque(unsigned capacity) {
     const char * message = NULL;
 
     struct Collection collection = {
-        .get = NULL,
-        .set = NULL,
+        .get = _dequeCollectionGet,
+        .set = _dequeCollectionSet,
         .atEnd = NULL,
     };
 
@@ -435,6 +438,11 @@ exit:
  * @return      the element at the front of the deque.
  */
 void * dequeGet(struct Deque * const deque, unsigned index) {
+    return _dequeCollectionGet(&deque -> collection, index);
+}
+
+static void * _dequeCollectionGet(struct Collection * const collection, size_t index) {
+    struct Deque const * const deque = (struct Deque const * const) collection;
     char const * message = NULL;
 
     if (deque == NULL) {
@@ -458,13 +466,17 @@ exit:
     exit(74);
 }
 
-
 /**
  * Sets the element at the given position in the deque.
  *
  * @param       deque pointer to deque to get the element from.
  */
 void dequeSet(struct Deque * const deque, unsigned index, void * element) {
+    _dequeCollectionSet(&deque -> collection, index, element);
+}
+
+static void _dequeCollectionSet(struct Collection * const collection, size_t index, void * element) {
+    struct Deque const * const deque = (struct Deque const * const) collection;
     char const * message = NULL;
 
     if (deque == NULL) {
