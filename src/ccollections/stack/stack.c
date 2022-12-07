@@ -77,7 +77,7 @@ void deleteStack(struct Stack ** const stack, CDeleter deleter) {
         return;
 
     if (deleter != NULL) {
-        while (isStackEmpty(stack) != false) {
+        while (isStackEmpty(stack) == false) {
             void * element = stackPop(stack);
             deleter(& element);
         }
