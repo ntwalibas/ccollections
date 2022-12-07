@@ -1,4 +1,4 @@
-/*  This file is part of the CCollections library
+/*  This file is part of the CCollections library.
  * 
  *  Copyright (c) 2022- Ntwali B. Toussaint
  *
