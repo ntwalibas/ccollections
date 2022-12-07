@@ -211,6 +211,10 @@ void dequePushBack(struct Deque * const deque, void * element) {
     // If we have only one element on the deque, we make sure that we can pop it from any direction
     if (deque -> size == 1)
         deque -> front = deque -> back;
+    
+    // TODO: explain the code below
+    if (deque -> buffer -> size == 1)
+        deque -> front_empty = false;
 
     return;
 
@@ -266,6 +270,10 @@ void dequePushFront(struct Deque * const deque, void * element) {
     // If we have only one element on the deque, we make sure that we can pop it from any direction
     if (deque -> size == 1)
         deque -> back = deque -> front;
+    
+    // TODO: explain the code below
+    if (deque -> buffer -> size == 1)
+        deque -> back_empty = false;
     
     return;
 
@@ -412,6 +420,72 @@ void * dequePeekFront(struct Deque * const deque) {
 
 exit:
     fprintf(stderr, "File: %s.\nOperation: dequePeekFront.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+/**
+ * Gets the element at the front of the deque.
+ *
+ * @param       deque pointer to deque to get the front element from.
+ *
+ * @return      the element at the front of the deque.
+ */
+void * dequeGet(struct Deque * const deque, unsigned index) {
+    char const * message = NULL;
+
+    if (deque == NULL) {
+        message = "The parameter <deque> cannot be NULL.";
+        goto exit;
+    }
+
+    if (deque -> size == 0)
+        return NULL;
+
+    if (index >= deque -> size) {
+        message = "Index is out of bounds.";
+        goto exit;
+    }
+
+    unsigned pos = index + deque -> front;
+    return ((void **) bufferGet(deque -> buffer, (pos / deque -> capacity) + (deque -> front_empty ? 1 : 0)))[pos % deque -> capacity];
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: dequeGet.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+/**
+ * Sets the element at the given position in the deque.
+ *
+ * @param       deque pointer to deque to get the element from.
+ */
+void dequeSet(struct Deque * const deque, unsigned index, void * element) {
+    char const * message = NULL;
+
+    if (deque == NULL) {
+        message = "The parameter <deque> cannot be NULL.";
+        goto exit;
+    }
+
+    if (deque -> size == 0) {
+        message = "Cannot set onto an empty deque.";
+        goto exit;
+    }
+
+    if (index >= deque -> size) {
+        message = "Index is out of bounds.";
+        goto exit;
+    }
+
+    unsigned pos = index + deque -> front;
+    ((void **) bufferGet(deque -> buffer, (pos / deque -> capacity) + (deque -> front_empty ? 1 : 0)))[pos % deque -> capacity] = element;
+
+    return;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: dequeSet.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
