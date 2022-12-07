@@ -14,7 +14,7 @@ class ArrayTest: public ::testing::Test {
         }
 
         void TearDown() override {
-            deleteArray(&array);
+            deleteArray(&array, nullptr);
         }
     
         struct Array * array;
@@ -44,7 +44,7 @@ TEST_F(ArrayTest, newArrayTest) {
 
 // deleteArray
 TEST_F(ArrayTest, deleteArrayTest) {
-    deleteArray(&array);
+    deleteArray(&array, nullptr);
 
     // Make sure the array is freed upon calling deleteArray
     EXPECT_EQ(array, nullptr);
@@ -69,7 +69,7 @@ TEST_F(ArrayTest, resizeArrayTest) {
     free(expected_message1);
 
     // We delete the array, we should gracefully fail to check if it is empty, without running into null pointer accesses
-    deleteArray(&array);
+    deleteArray(&array, nullptr);
 
     const char formatter2[] = "File: %s.\nOperation: resizeArray.\nMessage: %s\n";
     const char file2[] = "src/ccollections/array/array.c";
@@ -90,7 +90,7 @@ TEST_F(ArrayTest, isArrayEmptyTest) {
     EXPECT_EQ(isArrayEmpty(array), true);
 
     // We delete the array, we should gracefully fail to check if it is empty, without running into null pointer accesses
-    deleteArray(&array);
+    deleteArray(&array, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: isArrayEmpty.\nMessage: %s\n";
     const char file[] = "src/ccollections/array/array.c";
@@ -113,7 +113,7 @@ TEST_F(ArrayTest, arrayPushBackTest) {
     EXPECT_EQ(array -> size, 1);
 
     // We delete the array, we should not be able to push onto it
-    deleteArray(&array);
+    deleteArray(&array, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: arrayPushBack.\nMessage: %s\n";
     const char file[] = "src/ccollections/array/array.c";
@@ -167,7 +167,7 @@ TEST_F(ArrayTest, arrayGetTest) {
 
 
     // We delete the array, we should not be able to get the top element
-    deleteArray(&array);
+    deleteArray(&array, nullptr);
 
     const char formatter3[] = "File: %s.\nOperation: _arrayCollectionGet.\nMessage: %s\n";
     const char file3[] = "src/ccollections/array/array.c";
@@ -225,7 +225,7 @@ TEST_F(ArrayTest, arraySetTest) {
 
 
     // We delete the array, we should not be able to get the top element
-    deleteArray(&array);
+    deleteArray(&array, nullptr);
 
     const char formatter3[] = "File: %s.\nOperation: _arrayCollectionSet.\nMessage: %s\n";
     const char file3[] = "src/ccollections/array/array.c";

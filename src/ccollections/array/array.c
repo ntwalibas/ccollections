@@ -73,12 +73,19 @@ exit:
  *
  * @param       array pointer to memory occupied by the array.
  */
-void deleteArray(struct Array ** const array) {
+void deleteArray(struct Array ** const array, CDeleter deleter) {
     if (array == NULL)
         return;
 
     if (* array == NULL)
         return;
+    
+    if (deleter != NULL) {
+        for(unsigned i = 0; i < (* array) -> size; i++) {
+            void * element = (* array) -> elements[i];
+            deleter(& element);
+        }
+    }
 
     free((* array) -> elements);
     free(* array);

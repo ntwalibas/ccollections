@@ -47,7 +47,7 @@ struct Array * newArray(unsigned initial_capacity);
  *
  * @param       array pointer to memory occupied by the array.
  */
-void deleteArray(struct Array ** const array);
+void deleteArray(struct Array ** const array, CDeleter deleter);
 
 
 /**
