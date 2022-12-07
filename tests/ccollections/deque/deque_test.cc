@@ -15,7 +15,7 @@ class DequeTest: public ::testing::Test {
         }
 
         void TearDown() override {
-            deleteDeque(&deque);
+            deleteDeque(&deque, nullptr);
         }
     
         struct Deque * deque;
@@ -45,7 +45,7 @@ TEST_F(DequeTest, newDequeTest) {
 
 // deleteDeque
 TEST_F(DequeTest, deleteDequeTest) {
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     // Make sure the deque is freed upon calling deleteDeque
     EXPECT_EQ(deque, nullptr);
@@ -62,7 +62,7 @@ TEST_F(DequeTest, isDequeEmptyTest) {
     EXPECT_EQ(isDequeEmpty(deque), false);
 
     // We delete the deque, we should gracefully fail to check if it is empty, without running into null pointer accesses
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: isDequeEmpty.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
@@ -100,7 +100,7 @@ TEST_F(DequeTest, isDequeFullTest) {
     EXPECT_EQ(isDequeFull(deque), true);
 
     // We delete the deque, we should gracefully fail to check if it is full, without running into null pointer accesses
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: isDequeFull.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
@@ -139,7 +139,7 @@ TEST_F(DequeTest, dequePushBackTest) {
     EXPECT_EQ(*((int *)((void **)deque -> buffer -> contents[1])[2]), 7);
 
     // We delete the deque, we should not be able to push onto it
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: dequePushBack.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
@@ -178,7 +178,7 @@ TEST_F(DequeTest, dequePushFrontTest) {
     EXPECT_EQ(*((int *)((void **)deque -> buffer -> contents[0])[1]), 7);
 
     // We delete the deque, we should not be able to push onto it
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: dequePushFront.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
@@ -224,7 +224,7 @@ TEST_F(DequeTest, dequePopBackTest) {
 
 
     // We delete the deque, we should not be able to pop from it
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: dequePopBack.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
@@ -271,7 +271,7 @@ TEST_F(DequeTest, dequePopFrontTest) {
 
 
     // We delete the deque, we should not be able to pop from it
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: dequePopFront.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
@@ -300,7 +300,7 @@ TEST_F(DequeTest, dequePeekBackTest) {
 
 
     // We delete the deque, we should not be able to pop from it
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: dequePeekBack.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
@@ -329,7 +329,7 @@ TEST_F(DequeTest, dequePeekFrontTest) {
 
 
     // We delete the deque, we should not be able to pop from it
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: dequePeekFront.\nMessage: %s\n";
     const char file[] = "src/ccollections/deque/deque.c";
@@ -382,7 +382,7 @@ TEST_F(DequeTest, dequeGetTest) {
 
 
     // We delete the deque, we should not be able to pop from it
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter2[] = "File: %s.\nOperation: dequeGet.\nMessage: %s\n";
     const char file2[] = "src/ccollections/deque/deque.c";
@@ -451,7 +451,7 @@ TEST_F(DequeTest, dequeSetTest) {
 
 
     // We delete the deque, we should not be able to pop from it
-    deleteDeque(&deque);
+    deleteDeque(&deque, nullptr);
 
     const char formatter3[] = "File: %s.\nOperation: dequeSet.\nMessage: %s\n";
     const char file3[] = "src/ccollections/deque/deque.c";

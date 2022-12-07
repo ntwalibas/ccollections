@@ -56,7 +56,7 @@ struct Deque * newDeque(unsigned capacity);
  *
  * @param       deque pointer to memory occupied by the deque.
  */
-void deleteDeque(struct Deque ** const deque);
+void deleteDeque(struct Deque ** const deque, CDeleter deleter);
 
 
 /**
