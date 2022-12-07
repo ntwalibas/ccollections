@@ -1,0 +1,9 @@
+cc_test(
+  name = "deque_test",
+  size = "small",
+  srcs = ["deque_test.cc"],
+  deps = [
+    "@com_google_googletest//:gtest_main",
+    "//src/ccollections/deque:deque",
+  ],
+)
