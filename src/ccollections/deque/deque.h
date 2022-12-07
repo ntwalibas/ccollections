@@ -116,4 +116,24 @@ void * dequePopBack(struct Deque * const deque);
  */
 void * dequePopFront(struct Deque * const deque);
 
+
+/**
+ * Gets an element at the back of the deque.
+ *
+ * @param       deque pointer to deque to get the back element from.
+ *
+ * @return      the element at the back of the deque.
+ */
+void * dequePeekBack(struct Deque * const deque);
+
+
+/**
+ * Gets the element at the front of the deque.
+ *
+ * @param       deque pointer to deque to get the front element from.
+ *
+ * @return      the element at the front of the deque.
+ */
+void * dequePeekFront(struct Deque * const deque);
+
 #endif
