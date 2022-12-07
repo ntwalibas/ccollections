@@ -27,6 +27,7 @@ struct Collection {
     bool (* atEnd)(struct Collection const * const collection, unsigned index);
 };
 
-typedef int (* Comparator)(void const * a, void const * b);
+typedef int (* CComparator)(void const * a, void const * b);
+typedef void (* CDeleter)(void ** element);
 
 #endif
