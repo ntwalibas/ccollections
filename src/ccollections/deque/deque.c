@@ -451,7 +451,7 @@ void * dequeGet(struct Deque * const deque, unsigned index) {
     }
 
     unsigned pos = index + deque -> front;
-    return ((void **) bufferGet(deque -> buffer, (pos / deque -> capacity) + (deque -> front_empty ? 1 : 0)))[pos % deque -> capacity];
+    return ((void **) bufferGet(deque -> buffer, (pos / deque -> capacity) + deque -> front_empty))[pos % deque -> capacity];
 
 exit:
     fprintf(stderr, "File: %s.\nOperation: dequeGet.\nMessage: %s\n", __FILE__, message);
@@ -483,7 +483,7 @@ void dequeSet(struct Deque * const deque, unsigned index, void * element) {
     }
 
     unsigned pos = index + deque -> front;
-    ((void **) bufferGet(deque -> buffer, (pos / deque -> capacity) + (deque -> front_empty ? 1 : 0)))[pos % deque -> capacity] = element;
+    ((void **) bufferGet(deque -> buffer, (pos / deque -> capacity) + deque -> front_empty))[pos % deque -> capacity] = element;
 
     return;
 
