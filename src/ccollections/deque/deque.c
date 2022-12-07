@@ -270,7 +270,7 @@ void dequePushFront(struct Deque * const deque, void * element) {
     // If we have only one element on the deque, we make sure that we can pop it from any direction
     if (deque -> size == 1)
         deque -> back = deque -> front;
-    
+
     // TODO: explain the code below
     if (deque -> buffer -> size == 1)
         deque -> back_empty = false;
@@ -298,8 +298,10 @@ void * dequePopBack(struct Deque * const deque) {
         goto exit;
     }
     
-    if (deque -> back_empty && deque -> buffer -> size > 1)
+    if (deque -> back_empty && deque -> buffer -> size > 1) {
         free(bufferPopBack(deque -> buffer));
+        deque -> back_empty = false;
+    }
 
     if (deque -> size == 0)
         return NULL;
@@ -345,8 +347,10 @@ void * dequePopFront(struct Deque * const deque) {
         goto exit;
     }
     
-    if (deque -> front_empty && deque -> buffer -> size > 1)
+    if (deque -> front_empty && deque -> buffer -> size > 1) {
         free(bufferPopFront(deque -> buffer));
+        deque -> front_empty = false;
+    }
 
     if (deque -> size == 0)
         return NULL;
