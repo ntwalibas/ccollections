@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-#ifndef CCOLLECTIONS_ARRAY_H
-#define CCOLLECTIONS_ARRAY_H
+#ifndef CCOLLECTIONS_VECTOR_H
+#define CCOLLECTIONS_VECTOR_H
 
 #include <stdbool.h>
 #include <stddef.h>
