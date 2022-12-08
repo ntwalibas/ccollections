@@ -22,7 +22,7 @@
 #include <stddef.h>
 
 struct Collection {
-    void * (* get)(struct Collection const * const collection, unsigned index);
+    void * (* get)(struct Collection * const collection, unsigned index);
     void (* set)(struct Collection * const collection, unsigned index, void * element);
     bool (* atEnd)(struct Collection const * const collection, unsigned index);
 };
