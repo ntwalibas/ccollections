@@ -67,4 +67,98 @@ void deleteList(struct List ** const list, CDeleter deleter);
  */
 bool isListEmpty(struct List const * const list);
 
+
+/**
+ * Pushes an element to the back of the list.
+ *
+ * @param       list pointer to list to push back onto.
+ * @param       element pointer to the element to push back.
+ */
+void listPushBack(struct List * const list, void * element);
+
+
+/**
+ * Pushes the element to the front of the list.
+ *
+ * @param       list pointer to list to push front onto.
+ * @param       element pointer to the element to push at the front.
+ */
+void listPushFront(struct List * const list, void * element);
+
+
+/**
+ * Pops an element at the back of the list.
+ *
+ * @param       list pointer to list to pop back from.
+ *
+ * @return      the element at the back of the list.
+ */
+void * listPopBack(struct List * const list);
+
+
+/**
+ * Pops the element at the front of the list.
+ *
+ * @param       list pointer to list to pop front from.
+ *
+ * @return      the element at the front of the list.
+ */
+void * listPopFront(struct List * const list);
+
+
+/**
+ * Gets an element at the back of the list.
+ *
+ * @param       list pointer to list to get the back element from.
+ *
+ * @return      the element at the back of the list.
+ */
+void * listBack(struct List const * const list);
+
+
+/**
+ * Gets the element at the front of the list.
+ *
+ * @param       list pointer to list to get the front element from.
+ *
+ * @return      the element at the front of the list.
+ */
+void * listFront(struct List const * const list);
+
+
+/**
+ * Gets the element at the front of the list.
+ *
+ * @param       list pointer to list to get the front element from.
+ *
+ * @return      the element at the front of the list.
+ */
+void * listGet(struct List * const list, unsigned index);
+
+
+/**
+ * Sets the element at the given position in the list, replacing the existing element.
+ *
+ * @param       list pointer to list to get the element from.
+ */
+void listSet(struct List * const list, unsigned index, void * element);
+
+
+/**
+ * Inserts the element at the given position in the list, moving the other elements to the right.
+ *
+ * @param       list    pointer to list to get the element from.
+ * @param       index   the index where to insert the element.
+ * @param       element the element to insert.
+ */
+void listInsert(struct List * const list, unsigned index, void * element);
+
+
+/**
+ * Resets the current node and index to the beginning of the list.
+ *
+ * @param       list pointer to list to get the element from.
+ */
+void listResetCurrent(struct List * const list);
+
 #endif
