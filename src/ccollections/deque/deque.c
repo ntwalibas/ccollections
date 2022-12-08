@@ -470,7 +470,7 @@ static void * _dequeCollectionGet(struct Collection * const collection, unsigned
     return ((void **) bufferGet(deque -> buffer, (pos / deque -> capacity) + deque -> front_empty))[pos % deque -> capacity];
 
 exit:
-    fprintf(stderr, "File: %s.\nOperation: dequeGet.\nMessage: %s\n", __FILE__, message);
+    fprintf(stderr, "File: %s.\nOperation: _dequeCollectionGet.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 
@@ -508,7 +508,7 @@ static void _dequeCollectionSet(struct Collection * const collection, unsigned i
     return;
 
 exit:
-    fprintf(stderr, "File: %s.\nOperation: dequeSet.\nMessage: %s\n", __FILE__, message);
+    fprintf(stderr, "File: %s.\nOperation: _dequeCollectionSet.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 

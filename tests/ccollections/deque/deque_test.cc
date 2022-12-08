@@ -368,7 +368,7 @@ TEST_F(DequeTest, dequeGetTest) {
 
 
     // We attempt to get an element out of bounds, we should fail
-    const char formatter1[] = "File: %s.\nOperation: dequeGet.\nMessage: %s\n";
+    const char formatter1[] = "File: %s.\nOperation: _dequeCollectionGet.\nMessage: %s\n";
     const char file1[] = "src/ccollections/deque/deque.c";
     const char message1[] = "Index is out of bounds.";
 
@@ -384,7 +384,7 @@ TEST_F(DequeTest, dequeGetTest) {
     // We delete the deque, we should not be able to pop from it
     deleteDeque(&deque, nullptr);
 
-    const char formatter2[] = "File: %s.\nOperation: dequeGet.\nMessage: %s\n";
+    const char formatter2[] = "File: %s.\nOperation: _dequeCollectionGet.\nMessage: %s\n";
     const char file2[] = "src/ccollections/deque/deque.c";
     const char message2[] = "The parameter <deque> cannot be NULL.";
 
@@ -402,7 +402,7 @@ TEST_F(DequeTest, dequeSetTest) {
     int values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     // The deque is empty, We should not be able to set anything
-    const char formatter1[] = "File: %s.\nOperation: dequeSet.\nMessage: %s\n";
+    const char formatter1[] = "File: %s.\nOperation: _dequeCollectionSet.\nMessage: %s\n";
     const char file1[] = "src/ccollections/deque/deque.c";
     const char message1[] = "Cannot set onto an empty deque.";
 
@@ -437,7 +437,7 @@ TEST_F(DequeTest, dequeSetTest) {
 
 
     // We attempt to get an element out of bounds, we should fail
-    const char formatter2[] = "File: %s.\nOperation: dequeSet.\nMessage: %s\n";
+    const char formatter2[] = "File: %s.\nOperation: _dequeCollectionSet.\nMessage: %s\n";
     const char file2[] = "src/ccollections/deque/deque.c";
     const char message2[] = "Index is out of bounds.";
 
@@ -453,7 +453,7 @@ TEST_F(DequeTest, dequeSetTest) {
     // We delete the deque, we should not be able to pop from it
     deleteDeque(&deque, nullptr);
 
-    const char formatter3[] = "File: %s.\nOperation: dequeSet.\nMessage: %s\n";
+    const char formatter3[] = "File: %s.\nOperation: _dequeCollectionSet.\nMessage: %s\n";
     const char file3[] = "src/ccollections/deque/deque.c";
     const char message3[] = "The parameter <deque> cannot be NULL.";
 
