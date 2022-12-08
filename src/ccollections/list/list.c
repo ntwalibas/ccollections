@@ -27,8 +27,8 @@ static void * _listCollectionGet(struct Collection * const collection, unsigned 
 static void _listCollectionSet(struct Collection * const collection, unsigned index, void * element);
 static bool _listCollectionAtEnd(struct Collection const * const collection, unsigned index);
 
-static void * createNode(void * element);
-static void deleteNode(struct Node * node, CDeleter deleter);
+static void * createListNode(void * element);
+static void deleteListNode(struct ListNode * node, CDeleter deleter);
 
 
 /**
@@ -70,10 +70,10 @@ void deleteList(struct List ** const list, CDeleter deleter) {
     if (* list == NULL)
         return;
 
-    struct Node * current = (* list) -> head;
+    struct ListNode * current = (* list) -> head;
     while (current != NULL) {
-        struct Node * next = current -> next;
-        deleteNode(current, deleter);
+        struct ListNode * next = current -> next;
+        deleteListNode(current, deleter);
         current = next;
     }
 
@@ -113,7 +113,7 @@ void listPushBack(struct List * const list, void * element) {
     if (list == NULL)
         goto exit;
 
-    struct Node * new_tail = createNode(element);
+    struct ListNode * new_tail = createListNode(element);
     if (list -> size == 0) {
         list -> head = new_tail;
         list -> tail = new_tail;
@@ -146,7 +146,7 @@ void listPushFront(struct List * const list, void * element) {
     if (list == NULL)
         goto exit;
 
-    struct Node * new_head = createNode(element);
+    struct ListNode * new_head = createListNode(element);
     if (list -> size == 0) {
         list -> head = new_head;
         list -> tail = new_head;
@@ -183,7 +183,7 @@ void * listPopBack(struct List * const list) {
     if (list -> size == 0)
         return NULL;
     
-    struct Node * old_tail = list -> tail;
+    struct ListNode * old_tail = list -> tail;
     list -> tail = old_tail -> prev;
     list -> tail -> next = NULL;
     if (list -> current_node == old_tail) {
@@ -194,7 +194,7 @@ void * listPopBack(struct List * const list) {
     list -> size--;
 
     void * element = old_tail -> element;
-    deleteNode(old_tail, NULL);
+    deleteListNode(old_tail, NULL);
 
     return element;
 
@@ -219,7 +219,7 @@ void * listPopFront(struct List * const list) {
     if (list -> size == 0)
         return NULL;
     
-    struct Node * old_head = list -> head;
+    struct ListNode * old_head = list -> head;
     list -> head = old_head -> next;
     list -> head -> prev = NULL;
     if (list -> current_node == old_head) {
@@ -230,7 +230,7 @@ void * listPopFront(struct List * const list) {
     list -> size--;
 
     void * element = old_head -> element;
-    deleteNode(old_head, NULL);
+    deleteListNode(old_head, NULL);
 
     return element;
 
@@ -392,7 +392,7 @@ void listInsert(struct List * const list, unsigned index, void * element) {
         list -> current_index = move_right ? list -> current_index + 1 : list -> current_index - 1;
     }
 
-    struct Node * new_node = createNode(element);
+    struct ListNode * new_node = createListNode(element);
     new_node -> prev = list -> current_node -> prev;
     new_node -> next = list -> current_node;
     list -> current_node -> prev = new_node;
@@ -456,8 +456,8 @@ exit:
 }
 
 
-static void * createNode(void * element) {
-    struct Node * node = malloc(sizeof *node);
+static void * createListNode(void * element) {
+    struct ListNode * node = malloc(sizeof *node);
     if (node == NULL)
         return NULL;
     
@@ -468,7 +468,7 @@ static void * createNode(void * element) {
     return node;
 }
 
-static void deleteNode(struct Node * node, CDeleter deleter) {
+static void deleteListNode(struct ListNode * node, CDeleter deleter) {
     if (deleter != NULL)
         deleter(& node -> element);
     

@@ -24,19 +24,19 @@
 #include "../interfaces/interfaces.h"
 
 
-struct Node {
-    struct Node * prev;
-    struct Node * next;
+struct ListNode {
+    struct ListNode * prev;
+    struct ListNode * next;
     void * element;
 };
 
 struct List {
     struct Collection collection;
-    struct Node * head;
-    struct Node * tail;
+    struct ListNode * head;
+    struct ListNode * tail;
     unsigned size;
     struct {
-        struct Node * current_node;
+        struct ListNode * current_node;
         unsigned current_index;
     };
 };
