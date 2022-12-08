@@ -55,7 +55,7 @@ TEST_F(StackTest, isStackEmptyTest) {
     // No elements have been added to the stack, it should be empty
     EXPECT_EQ(isStackEmpty(stack), true);
 
-    // We delete the stack, we should gracefully fail to check if it is empty, without running into null pointer accesses
+    // We delete the stack, without running into null pointer accesses
     deleteStack(&stack, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: isStackEmpty.\nMessage: %s\n";

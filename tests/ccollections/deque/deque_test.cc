@@ -61,7 +61,7 @@ TEST_F(DequeTest, isDequeEmptyTest) {
     dequePushBack(deque, &values[0]);
     EXPECT_EQ(isDequeEmpty(deque), false);
 
-    // We delete the deque, we should gracefully fail to check if it is empty, without running into null pointer accesses
+    // We delete the deque, without running into null pointer accesses
     deleteDeque(&deque, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: isDequeEmpty.\nMessage: %s\n";

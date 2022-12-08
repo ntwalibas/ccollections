@@ -68,7 +68,7 @@ TEST_F(VectorTest, resizeVectorTest) {
 
     free(expected_message1);
 
-    // We delete the vector, we should gracefully fail to check if it is empty, without running into null pointer accesses
+    // We delete the vector, without running into null pointer accesses
     deleteVector(&vector, nullptr);
 
     const char formatter2[] = "File: %s.\nOperation: resizeVector.\nMessage: %s\n";
@@ -89,7 +89,7 @@ TEST_F(VectorTest, isVectorEmptyTest) {
     // No elements have been added to the vector, it should be empty
     EXPECT_EQ(isVectorEmpty(vector), true);
 
-    // We delete the vector, we should gracefully fail to check if it is empty, without running into null pointer accesses
+    // We delete the vector, without running into null pointer accesses
     deleteVector(&vector, nullptr);
 
     const char formatter[] = "File: %s.\nOperation: isVectorEmpty.\nMessage: %s\n";
