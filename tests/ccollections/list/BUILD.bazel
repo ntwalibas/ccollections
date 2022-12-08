@@ -1,0 +1,9 @@
+cc_test(
+  name = "list_test",
+  size = "small",
+  srcs = ["list_test.cc"],
+  deps = [
+    "@com_google_googletest//:gtest_main",
+    "//src/ccollections/list:list",
+  ],
+)

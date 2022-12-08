@@ -1,0 +1,7 @@
+cc_library(
+    name = "list",
+    srcs = ["list.c"],
+    hdrs = ["list.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//src/ccollections/interfaces:interfaces"],
+)
