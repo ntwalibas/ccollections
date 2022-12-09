@@ -393,9 +393,15 @@ void listInsert(struct List * const list, unsigned index, void * element) {
     }
 
     struct ListNode * new_node = createListNode(element);
-    new_node -> prev = list -> current_node -> prev;
-    new_node -> next = list -> current_node;
-    list -> current_node -> prev = new_node;
+
+    struct ListNode * prev_node = list -> current_node -> prev;
+    struct ListNode * next_node = list -> current_node;
+
+    if (prev_node != NULL)
+        prev_node -> next = new_node;
+    next_node -> prev = new_node;
+    new_node -> prev = prev_node;
+    new_node -> next = next_node;
     list -> current_node = new_node;
 
     if (list -> current_index == 0)
