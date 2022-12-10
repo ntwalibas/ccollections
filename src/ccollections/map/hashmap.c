@@ -26,9 +26,8 @@
 #include "hashmap.h"
 #include "siphash.h"
 
-// static void * _mapCollectionGet(struct Collection const * const collection, unsigned index);
-// static void _mapCollectionSet(struct Collection * const collection, unsigned index, void * item);
-// static bool _mapCollectionAtEnd(struct Collection const * const collection, unsigned index);
+static void * _hashMapCollectionGet(struct Collection const * const collection, unsigned index);
+static bool _hashMapCollectionAtEnd(struct Collection const * const collection, unsigned index);
 
 static void * createItem(unsigned key_len, void const * key, void * value,
     uint64_t hash, struct HashMapItem * prev, struct HashMapItem * next);
@@ -58,9 +57,9 @@ struct HashMap * newHashMap(unsigned initial_capacity) {
     }
 
     struct Collection collection = {
-        .get = NULL,
+        .get = _hashMapCollectionGet,
         .set = NULL,
-        .atEnd = NULL,
+        .atEnd = _hashMapCollectionAtEnd,
     };
 
     map -> collection = collection;
@@ -287,14 +286,14 @@ void * hashMapGet(struct HashMap const * const map, unsigned key_len, void * key
 
     if (item == NULL)
         return NULL;
-    
+
     bool found = false;
     while (item != NULL) {
         if (item -> hash == hash) {
             found = true;
             break;
         }
-        
+
         item = item -> next;
     }
 
@@ -425,6 +424,70 @@ bool hashMapDelete(struct HashMap * const map, unsigned key_len, void * key, CDe
 
 exit:
     fprintf(stderr, "File: %s.\nOperation: hashMapDelete.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+static void * _hashMapCollectionGet(struct Collection const * const collection, unsigned index) {
+    struct HashMap const * const map = (struct HashMap const * const) collection;
+    char const * message = NULL;
+
+    if (map == NULL) {
+        message = "The parameter <map> cannot be NULL.";
+        goto exit;
+    }
+
+    if (map -> size == 0) {
+        message = "The hash map is empty, cannot get items.";
+        goto exit;
+    }
+
+    if (index >= map -> size) {
+        message = "The index is out of bounds.";
+        goto exit;
+    }
+
+    unsigned shadow_index = 0;
+    for (int i = 0; i < map -> capacity; i++) {
+        struct HashMapItem * item = map -> items[i];
+        if (item == NULL)
+            continue;
+
+        while (item != NULL) {
+            if (shadow_index == index)
+                return item;
+
+            shadow_index++;
+            item = item -> next;
+        }
+    }
+
+    return NULL;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: _hashMapCollectionGet.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+static bool _hashMapCollectionAtEnd(struct Collection const * const collection, unsigned index) {
+    struct HashMap const * const map = (struct HashMap const * const) collection;
+    const char * message = NULL;
+
+    if (map == NULL) {
+        message = "The parameter <map> cannot be NULL.";
+        goto exit;
+    }
+
+    if (map -> size == 0) {
+        message = "The hash  map is empty, cannot check if at end.";
+        goto exit;
+    }
+
+    return index >= map -> size;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: _hashMapCollectionAtEnd.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 

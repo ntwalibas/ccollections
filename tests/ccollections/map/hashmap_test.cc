@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
-#include <stddef.h>
+#include <gmock/gmock.h>
 #include <inttypes.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <vector>
 
 extern "C" {
     #include "src/ccollections/map/hashmap.h"
@@ -397,3 +399,52 @@ TEST_F(HashMapTest, hashMapDeleteTest) {
     free(expected_message);
 }
 
+// ->atEnd
+TEST_F(HashMapTest, hashMap_atEnd_Test) {
+    // Insert a few values
+    char * pair1[] = {"key1", "value1"};
+    char * pair2[] = {"key2", "value2"};
+    char * pair3[] = {"key3", "value3"};
+
+    hashMapInsert(hash_map, sizeof(pair1[0]) / sizeof(char), pair1[0], pair1[1]);
+    hashMapInsert(hash_map, sizeof(pair2[0]) / sizeof(char), pair2[0], pair2[1]);
+    hashMapInsert(hash_map, sizeof(pair3[0]) / sizeof(char), pair3[0], pair3[1]);
+
+    EXPECT_EQ(hash_map -> collection.atEnd(&hash_map -> collection, 2), false);
+    EXPECT_EQ(hash_map -> collection.atEnd(&hash_map -> collection, 3), true);
+}
+
+// ->get
+TEST_F(HashMapTest, hashMap_get_Test) {
+    // Insert a few values
+    char * pair1[] = {"key1", "value1"};
+    char * pair2[] = {"key2", "value2"};
+    char * pair3[] = {"key3", "value3"};
+
+    std::vector<char *> keys = {"key1", "key2", "key3"};
+    std::vector<char *> values = {"value1", "value2", "value3"};
+
+    hashMapInsert(hash_map, sizeof(pair1[0]) / sizeof(char), pair1[0], pair1[1]);
+    hashMapInsert(hash_map, sizeof(pair2[0]) / sizeof(char), pair2[0], pair2[1]);
+    hashMapInsert(hash_map, sizeof(pair3[0]) / sizeof(char), pair3[0], pair3[1]);
+
+    struct HashMapItem * item = (struct HashMapItem *) hash_map -> collection.get(&hash_map -> collection, 2);
+    ASSERT_THAT(keys, ::testing::Contains(item -> key));
+    ASSERT_THAT(values, ::testing::Contains(item -> value));
+
+    // Cannot get from an out of bounds index
+    const char formatter[] = "File: %s.\nOperation: _hashMapCollectionGet.\nMessage: %s\n";
+    const char file[] = "src/ccollections/map/hashmap.c";
+    const char message[] = "The index is out of bounds.";
+    
+    int size = snprintf(NULL, 0, formatter, file, message);
+    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
+    snprintf(expected_message, size + 1, formatter, file, message);
+
+    EXPECT_DEATH(
+        hash_map -> collection.get(&hash_map -> collection, 3),
+        expected_message
+    );
+
+    free(expected_message);
+}
