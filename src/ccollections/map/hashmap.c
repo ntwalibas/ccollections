@@ -91,8 +91,18 @@ void deleteHashMap(struct HashMap ** const map, CDeleter deleter) {
     if (* map == NULL)
         return;
     
-    if (deleter != NULL) {
-        ;
+    for (unsigned i = 0; i < (* map) -> capacity; i++) {
+        struct HashMapItem * item = (* map) -> items[i];
+        if (item == NULL)
+            continue;
+        
+
+        struct HashMapItem * next = NULL;
+        do {
+            next = item -> next;
+            deleteItem(item, deleter);
+            item = next;
+        } while (next != NULL);
     }
 
     free((* map) -> items);
