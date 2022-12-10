@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-#ifndef CCOLLECTIONS_MAP_H
-#define CCOLLECTIONS_MAP_H
+#ifndef CCOLLECTIONS_HASHMAP_H
+#define CCOLLECTIONS_HASHMAP_H
 
 #include <stdbool.h>
 #include <stdint.h>
