@@ -358,3 +358,42 @@ TEST_F(HashMapTest, hashMapSetTest) {
 
     free(expected_message);
 }
+
+// hashMapDelete
+TEST_F(HashMapTest, hashMapDeleteTest) {
+    // Insert a few values
+    char * pair1[] = {"key1", "value1"};
+    char * pair2[] = {"key2", "value2"};
+    char * pair3[] = {"key3", "value3"};
+    
+    hashMapInsert(hash_map, sizeof(pair1[0]) / sizeof(char), pair1[0], pair1[1]);
+    hashMapInsert(hash_map, sizeof(pair2[0]) / sizeof(char), pair2[0], pair2[1]);
+    hashMapInsert(hash_map, sizeof(pair3[0]) / sizeof(char), pair3[0], pair3[1]);
+    EXPECT_EQ(hash_map -> size, 3);
+
+    hashMapDelete(hash_map, sizeof(pair1[0]) / sizeof(char), pair1[0], NULL);
+    EXPECT_EQ(hash_map -> size, 2);
+    EXPECT_EQ(
+        hashMapGet(hash_map, sizeof(pair1[0]) / sizeof(char), pair1[0]),
+        nullptr
+    );
+
+    // We delete the hashMap, we should not be able to delete anything from it
+    deleteHashMap(&hash_map, nullptr);
+
+    const char formatter[] = "File: %s.\nOperation: hashMapDelete.\nMessage: %s\n";
+    const char file[] = "src/ccollections/map/hashmap.c";
+    const char message[] = "The parameter <map> cannot be NULL.";
+    
+    int size = snprintf(NULL, 0, formatter, file, message);
+    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
+    snprintf(expected_message, size + 1, formatter, file, message);
+
+    EXPECT_DEATH(
+        hashMapDelete(hash_map, sizeof(pair1[0]) / sizeof(char), pair1[0], NULL),
+        expected_message
+    );
+
+    free(expected_message);
+}
+

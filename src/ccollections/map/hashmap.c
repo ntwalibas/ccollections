@@ -95,7 +95,6 @@ void deleteHashMap(struct HashMap ** const map, CDeleter deleter) {
         struct HashMapItem * item = (* map) -> items[i];
         if (item == NULL)
             continue;
-        
 
         struct HashMapItem * next = NULL;
         do {
@@ -285,11 +284,21 @@ void * hashMapGet(struct HashMap const * const map, unsigned key_len, void * key
     uint64_t hash = siphash24((char const *) key, key_len, map -> hash_key);
     uint64_t hash_key = hash % map -> capacity;
     struct HashMapItem * item = map -> items[hash_key];
-    
-    while (item -> hash != hash)
-        item = item -> next;
 
-    return item -> value;
+    if (item == NULL)
+        return NULL;
+    
+    bool found = false;
+    while (item != NULL) {
+        if (item -> hash == hash) {
+            found = true;
+            break;
+        }
+        
+        item = item -> next;
+    }
+
+    return found ? item -> value : NULL;
 
 exit:
     fprintf(stderr, "File: %s.\nOperation: hashMapGet.\nMessage: %s\n", __FILE__, message);
@@ -352,6 +361,70 @@ void * hashMapSet(struct HashMap * const map, unsigned key_len, void const * key
 
 exit:
     fprintf(stderr, "File: %s.\nOperation: hashMapSet.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+/**
+ * Removes the key-value pair identified by the given key.
+ *
+ * @param       map pointer to map to use.
+ * @param       key the index at which to look.
+ *
+ * @return      true if the value was removed, false otherwise (e.g. the key could not be found).
+ */
+bool hashMapDelete(struct HashMap * const map, unsigned key_len, void * key, CDeleter deleter) {
+    char const * message = NULL;
+
+    if (map == NULL) {
+        message = "The parameter <map> cannot be NULL.";
+        goto exit;
+    }
+
+    if (key_len == 0) {
+        message = "The key (via key_len) cannot be zero.";
+        goto exit;
+    }
+
+    uint64_t hash = siphash24((char const *) key, key_len, map -> hash_key);
+    uint64_t hash_key = hash % map -> capacity;
+
+    struct HashMapItem * existing_item = map -> items[hash_key];
+    if (existing_item == NULL)
+        return false;
+    
+    do {
+        if (existing_item -> hash == hash) {
+            struct HashMapItem * prev = existing_item -> prev;
+            struct HashMapItem * next = existing_item -> next;
+            if (prev != NULL) {
+                prev -> next = next;
+                if (prev -> prev == NULL)
+                    map -> items[hash_key] = prev;
+            }
+
+            if (next != NULL) {
+                next -> prev = prev;
+                if (prev == NULL)
+                    map -> items[hash_key] = next;
+            }
+
+            if (prev == NULL && next == NULL)
+                map -> items[hash_key] = NULL;
+
+            deleteItem(existing_item, deleter);
+
+            map -> size--;
+            return true;
+        }
+
+        existing_item = existing_item -> next;
+    } while(existing_item != NULL);
+
+    return false;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: hashMapDelete.\nMessage: %s\n", __FILE__, message);
     exit(74);
 }
 

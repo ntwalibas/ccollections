@@ -131,4 +131,15 @@ void * hashMapGet(struct HashMap const * const map, unsigned key_len, void * key
  */
 void * hashMapSet(struct HashMap * const map, unsigned key_len, void const * key, void * value);
 
+
+/**
+ * Removes the key-value pair identified by the given key.
+ *
+ * @param       map pointer to map to use.
+ * @param       key the index at which to look.
+ *
+ * @return      true if the value was removed, false otherwise (e.g. the key could not be found).
+ */
+bool hashMapDelete(struct HashMap * const map, unsigned key_len, void * key, CDeleter deleter);
+
 #endif
