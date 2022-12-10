@@ -30,7 +30,8 @@
 // static void _mapCollectionSet(struct Collection * const collection, unsigned index, void * item);
 // static bool _mapCollectionAtEnd(struct Collection const * const collection, unsigned index);
 
-static void * createItem(unsigned key_len, void * key, void * value, uint64_t hash, struct HashMapItem * next);
+static void * createItem(unsigned key_len, void const * key, void * value,
+    uint64_t hash, struct HashMapItem * prev, struct HashMapItem * next);
 static void deleteItem(struct HashMapItem * item, CDeleter deleter);
 
 float hash_map_growth_factor = 1.75;
@@ -134,6 +135,8 @@ struct HashMap * resizeHashMap(struct HashMap * const map, unsigned new_capacity
             uint64_t hash = siphash24((char const *) item -> key, item -> key_len, map -> hash_key);
             uint64_t hash_key = hash % new_capacity;
             item -> hash = hash;
+            if (items[hash_key] != NULL)
+                items[hash_key] -> prev = item;
             item -> next = items[hash_key];
             items[hash_key] = item;
             item = item -> next;
@@ -231,11 +234,12 @@ bool hashMapInsert(struct HashMap * const map, unsigned key_len, void const * ke
         goto exit;
     }
     // Calculate the load factor
-    if (map -> items[hash_key] == NULL)
+    if (existing_item == NULL)
         map -> buckets_count += 1;
 
-    struct HashMapItem * item = createItem(key_len, key, value, hash, NULL);
-    item -> next = map -> items[hash_key];
+    struct HashMapItem * item = createItem(key_len, key, value, hash, NULL, existing_item);
+    if (existing_item != NULL)
+        existing_item -> prev = item;
     map -> items[hash_key] = item;
     map -> size++;
 
@@ -283,7 +287,66 @@ exit:
 }
 
 
-static void * createItem(unsigned key_len, void * key, void * value, uint64_t hash, struct HashMapItem * next) {
+/*
+ * Changes the value associated to the given key.
+ *
+ * @param       map     pointer to map to append an element to.
+ * @param       key_len the length of the key in bytes.
+ * @param       key     the key to associate to the value.
+ * @param       value   pointer to the value to add to the map.
+ *
+ * @return      the value that was replaced if done, otherwise NULL.
+ */
+void * hashMapSet(struct HashMap * const map, unsigned key_len, void const * key, void * value) {
+    char const * message = NULL;
+
+    if (map == NULL) {
+        message = "The parameter <map> cannot be NULL.";
+        goto exit;
+    }
+
+    if (key_len == 0) {
+        message = "The key (via key_len) cannot be zero.";
+        goto exit;
+    }
+
+    uint64_t hash = siphash24((char const *) key, key_len, map -> hash_key);
+    uint64_t hash_key = hash % map -> capacity;
+
+    struct HashMapItem * existing_item = map -> items[hash_key];
+    if (existing_item == NULL) {
+        hashMapInsert(map, key_len, key, value);
+        return NULL;
+    }
+    
+    do {
+        if (existing_item -> hash == hash) {
+            struct HashMapItem * new_item = createItem(
+                key_len, key, value, hash,
+                existing_item -> prev,  existing_item -> next
+            );
+            map -> items[hash_key] = new_item;
+
+            void * value = existing_item -> value;
+            deleteItem(existing_item, NULL);
+            return value;
+        }
+
+        existing_item = existing_item -> next;
+    } while(existing_item != NULL);
+
+    // If we reach here, then we couldn't find an item with the exact has but the approximate one
+    // In this case, the key-value pair needs to be added to the existing items bucket
+    hashMapInsert(map, key_len, key, value);
+    return NULL;
+
+exit:
+    fprintf(stderr, "File: %s.\nOperation: hashMapSet.\nMessage: %s\n", __FILE__, message);
+    exit(74);
+}
+
+
+static void * createItem(unsigned key_len, void const * key, void * value, uint64_t hash, struct HashMapItem * prev, struct HashMapItem * next) {
     struct HashMapItem * item = malloc(sizeof *item);
     if (item == NULL)
         return NULL;
@@ -292,6 +355,7 @@ static void * createItem(unsigned key_len, void * key, void * value, uint64_t ha
     item -> value = value;
     item -> key_len = key_len;
     item -> hash = hash;
+    item -> prev = prev;
     item -> next = next;
 
     return item;

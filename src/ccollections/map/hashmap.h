@@ -29,10 +29,11 @@ extern float map_growth_factor;
 
 
 struct HashMapItem {
-    void * key;
+    void const * key;
     void * value;
     unsigned key_len;
     uint64_t hash;
+    struct HashMapItem * prev;
     struct HashMapItem * next;
 };
 
@@ -101,7 +102,7 @@ bool isHashMapFull(struct HashMap const * const map);
  * @param       key     the key to associate to the value.
  * @param       value   pointer to the value to add to the map.
  *
- * @return      returns true if the key-value pair was inserted, false otherwise
+ * @return      true if the key-value pair was inserted, false otherwise
  */
 bool hashMapInsert(struct HashMap * const map, unsigned key_len, void const * key, void * value);
 
@@ -117,13 +118,17 @@ bool hashMapInsert(struct HashMap * const map, unsigned key_len, void const * ke
 void * hashMapGet(struct HashMap const * const map, unsigned key_len, void * key);
 
 
-/**
- * Set an element at the specified index.
+/*
+ * Changes the value associated to the given key, if it exists.
+ * If the key doesn't exist, the new key-value pair will be inserted.
  *
- * @param       map pointer to map to use.
- * @param       index the index at which to write.
- * @param       element the element to write at the specified index.
+ * @param       map     pointer to map to append an element to.
+ * @param       key_len the length of the key in bytes.
+ * @param       key     the key to associate to the value.
+ * @param       value   pointer to the value to add to the map.
+ *
+ * @return      the value that was replaced if done, otherwise NULL.
  */
-// void hashMapSet(struct HashMap * const map, unsigned index, void * element);
+void * hashMapSet(struct HashMap * const map, unsigned key_len, void const * key, void * value);
 
 #endif
