@@ -1,0 +1,9 @@
+cc_test(
+  name = "map_test",
+  size = "small",
+  srcs = ["hashmap_test.cc"],
+  deps = [
+    "@com_google_googletest//:gtest_main",
+    "//src/ccollections/map:map",
+  ],
+)
