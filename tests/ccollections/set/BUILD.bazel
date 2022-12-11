@@ -1,0 +1,9 @@
+cc_test(
+  name = "set_test",
+  size = "small",
+  srcs = ["hashset_test.cc"],
+  deps = [
+    "@com_google_googletest//:gtest_main",
+    "//src/ccollections/set:set",
+  ],
+)
