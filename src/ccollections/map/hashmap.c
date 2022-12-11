@@ -408,8 +408,10 @@ bool hashMapDelete(struct HashMap * const map, unsigned key_len, void * key, CDe
                     map -> items[hash_key] = next;
             }
 
-            if (prev == NULL && next == NULL)
+            if (prev == NULL && next == NULL) {
                 map -> items[hash_key] = NULL;
+                map -> buckets_count--;
+            }
 
             deleteItem(existing_item, deleter);
 
