@@ -3,5 +3,5 @@ cc_library(
     srcs = ["deque.c"],
     hdrs = ["deque.h"],
     visibility = ["//visibility:public"],
-    deps = ["//src/ccollections/interfaces:interfaces"],
+    deps = ["//src/ccollections/common:common"],
 )

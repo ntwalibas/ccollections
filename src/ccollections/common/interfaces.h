@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-#ifndef CCOLLECTIONS_INTERFACE_H
-#define CCOLLECTIONS_INTERFACE_H
+#ifndef CCOLLECTIONS_INTERFACES_H
+#define CCOLLECTIONS_INTERFACES_H
 
 #include <stdbool.h>
 #include <stddef.h>

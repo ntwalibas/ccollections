@@ -23,7 +23,7 @@
 #include <stddef.h>
 
 
-#include "../interfaces/interfaces.h"
+#include "../common/interfaces.h"
 
 extern float set_growth_factor;
 

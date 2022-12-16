@@ -3,5 +3,5 @@ cc_library(
     srcs = ["vector.c"],
     hdrs = ["vector.h"],
     visibility = ["//visibility:public"],
-    deps = ["//src/ccollections/interfaces:interfaces"],
+    deps = ["//src/ccollections/common:common"],
 )
