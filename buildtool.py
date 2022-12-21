@@ -22,7 +22,6 @@ The available commands are explained below for quick reference.
 """
 
 import os
-import re
 import shutil
 import semver
 import pathlib
@@ -33,7 +32,7 @@ except ImportError:
     print("Please install typer with `pip install \"typer[all]\"`.")
     exit(1)
 
-from subprocess import run, check_output
+from subprocess import run
 try:
     from rich.progress import track
 except ImportError:
