@@ -44,8 +44,10 @@ app = typer.Typer(no_args_is_help = True)
 libname = "ccollections"
 
 # We get all available targets and tests from their directory names
-targets = [f"{f.path}:{f.name}" for f in os.scandir("src/collections") if f.is_dir()]
-tests = [f"//{f.path}:{f.name}_test" for f in os.scandir("tests/collections") if f.is_dir()]
+collections_targets = [f"{f.path}:{f.name}" for f in os.scandir("src/collections") if f.is_dir()]
+collections_tests = [f"//{f.path}:{f.name}_test" for f in os.scandir("tests/collections") if f.is_dir()]
+algorithms_targets = [f"{f.path}:{f.name}" for f in os.scandir("src/algorithms") if f.is_dir()]
+algorithms_tests = [f"//{f.path}:{f.name}_test" for f in os.scandir("tests/algorithms") if f.is_dir()]
 
 
 # Courtesy of https://stackoverflow.com/questions/10349781/how-to-open-read-write-or-create-a-file-with-truncation-allowed/10352231#10352231
@@ -98,17 +100,24 @@ def about():
 @app.command()
 def build(
     verbose: bool = typer.Option(False, "--verbose", "-v"),
-    target: str = typer.Option(None, "--target", "-t")
+    collection: str = typer.Option(None, "--collection", "-c"),
+    algorithm: str = typer.Option(None, "--algorithm", "-a"),
 ):
     """Runs Bazel to create output artifacts from targets specified in BUILD.bazel files."""
     number_of_failures = 0
+    _targets = []
 
-    if target is not None:
-        target = f"src/collections/{target}:{target}"
+    if collection is not None:
+        target = f"src/collections/{collection}:{collection}"
         _targets = [target]
-    else:
-        global targets
-        _targets = targets
+    
+    if algorithm is not None:
+        target = f"src/algorithms/{algorithm}:{algorithm}"
+        _targets += [target]
+    
+    if not _targets:
+        global collections_targets, algorithms_targets
+        _targets = collections_targets + algorithms_targets
 
     for target in track(_targets, description = "Building"):
         build_cmd = ["bazel", "build", f"//{target}"]
@@ -124,16 +133,25 @@ def build(
 
 
 @app.command()
-def test(target: str = typer.Option(None, "--target", "-t")):
+def test(
+    collection: str = typer.Option(None, "--collection", "-c"),
+    algorithm: str = typer.Option(None, "--algorithm", "-a")
+):
     """Invokes Bazel to test the entire project."""
     number_of_failures = 0
+    _tests = []
 
-    if target is not None:
-        test = f"//tests/collections/{target}:{target}_test"
+    if collection is not None:
+        test = f"tests/collections/{collection}:{collection}_test"
         _tests = [test]
-    else:
-        global tests
-        _tests = tests
+    
+    if algorithm is not None:
+        test = f"tests/algorithms/{algorithm}:{algorithm}_test"
+        _tests += [test]
+    
+    if not _tests:
+        global collections_tests, algorithms_tests
+        _tests = collections_tests + algorithms_tests
 
     for test in track(_tests, description = "Testing"):
         test_cmd = ["bazel", "test", "--test_output=all", test]
@@ -213,13 +231,13 @@ def release(
     release_name = "{}-{}-{}".format(libname, ops.lower() if ops else uname.system.lower(), arch.lower() if arch else uname.machine.lower())
 
     # Test the project and if tests fail, we don't continue further
-    if test(None) > 0:
+    if test(None, None) > 0:
         exit(1)
     
     print()
 
     # Build the project and if building fails, we don't continue
-    if build(False, None) > 0:
+    if build(False, None, None) > 0:
         exit(1)
     
     print()
@@ -235,16 +253,9 @@ def release(
     lib_pathlib = pathlib.Path(lib_path)
     lib_pathlib.mkdir(parents = True, exist_ok = True)
 
-    # Copy headers and artifacts
+    # Copy and artifacts
+    targets = collections_targets + algorithms_targets
     for target in track(targets, description = "Releasing"):
-        # Copy headers associated to this target
-        header_file = target.replace(':', '/')
-        header_file = f"{header_file}.h"
-        header_dest = os.path.join(ccollections_path, os.path.basename(header_file))
-        with _touchopen(header_dest, 'w'):
-            shutil.copyfile(header_file, header_dest)
-
-        # Copy artifacts associated to this target
         query_cmd = ["bazel", "cquery", target, "--output=files"]
         query_result = run(query_cmd, capture_output = True, text = True)
         artifacts = [y for y in (x.strip() for x in query_result.stdout.splitlines()) if y]
