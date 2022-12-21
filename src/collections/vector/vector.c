@@ -160,7 +160,7 @@ bool vectorPushBack(struct Vector * const vector, void * element) {
  *
  * @return      the element at the specified index.
  */
-void * vectorGet(struct Vector const * const vector, unsigned index) {
+void * vectorGet(struct Vector * const vector, unsigned index) {
     alt_assert(vector != NULL, "The parameter <vector> cannot be NULL.");
     return _vectorCollectionGet(&vector -> collection, index);
 }
