@@ -1,0 +1,12 @@
+cc_test(
+  name = "lsearch_test",
+  size = "small",
+  srcs = ["lsearch_test.cc"],
+  deps = [
+    "@com_google_googletest//:gtest_main",
+    "//src/algorithms/lsearch:lsearch",
+    "//src/collections/vector:vector",
+    "//include:include",
+  ],
+  copts = ["-Iinclude"],
+)
