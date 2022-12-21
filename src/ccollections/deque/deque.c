@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "../common/common.h"
 #include "deque.h"
 
 /* 
@@ -63,18 +64,7 @@ float deque_growth_factor = 2;
  * @return      the newly created deque.
  */
 struct Deque * newDeque(unsigned capacity) {
-    const char * message = NULL;
-
-    struct Collection collection = {
-        .get = _dequeCollectionGet,
-        .set = _dequeCollectionSet,
-        .atEnd = _dequeCollectionAtEnd,
-    };
-
-    if (capacity == 0) {
-        message = "Deque capacity cannot be zero.";
-        goto exit;
-    }
+    alt_assert(capacity != 0, "Deque capacity cannot be zero.");
 
     struct Deque * deque = malloc(sizeof *deque);
     if (deque == NULL)
@@ -87,6 +77,12 @@ struct Deque * newDeque(unsigned capacity) {
         return NULL;
     }
 
+    struct Collection collection = {
+        .get = _dequeCollectionGet,
+        .set = _dequeCollectionSet,
+        .atEnd = _dequeCollectionAtEnd,
+    };
+
     deque -> collection = collection;
     deque -> buffer = buffer;
     deque -> front_empty = true;
@@ -97,10 +93,6 @@ struct Deque * newDeque(unsigned capacity) {
     deque -> size = 0;
 
     return deque;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: newDeque.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -137,15 +129,9 @@ void deleteDeque(struct Deque ** const deque, CDeleter deleter) {
  * @return      true if the deque is empty, false otherwise.
  */
 bool isDequeEmpty(struct Deque const * const deque) {
-    const char * message = "The parameter <deque> cannot be NULL.";
-    if (deque == NULL)
-        goto exit;
+    alt_assert(deque != NULL, "The parameter <deque> cannot be NULL.");
 
     return deque -> size == 0;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: isDequeEmpty.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -157,9 +143,7 @@ exit:
  * @return      true if the deque is full, false otherwise.
  */
 bool isDequeFull(struct Deque const * const deque) {
-    const char * message = "The parameter <deque> cannot be NULL.";
-    if (deque == NULL)
-        goto exit;
+    alt_assert(deque != NULL, "The parameter <deque> cannot be NULL.");
 
     if (deque -> size == 0)
         return false;
@@ -168,10 +152,6 @@ bool isDequeFull(struct Deque const * const deque) {
         return true;
     
     return false;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: isDequeFull.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -182,22 +162,15 @@ exit:
  * @param       element pointer to the element to push back.
  */
 void dequePushBack(struct Deque * const deque, void * element) {
-    char const * message = NULL;
+    alt_assert(deque != NULL, "The parameter <deque> cannot be NULL.");
+
     unsigned index = 0;
-    
-    if (deque == NULL) {
-        message = "The parameter <deque> cannot be NULL.";
-        goto exit;
-    }
 
     // If we don't have space for back elements, we request it
     // Same if we ran out of space for back elements
     if (deque -> back_empty || deque -> back == deque -> capacity - 1) {
         bool back_buffer_ready = bufferPushBack(deque -> buffer, malloc(deque -> capacity * sizeof(void *)));
-        if (! back_buffer_ready) {
-            message = "Failed to allocate space for new elements to push to the back.";
-            goto exit;
-        }
+        alt_assert(back_buffer_ready, "Failed to allocate space for new elements to push to the back.");
     }
 
     // If we haven't pushed anything on the back buffer, we start now
@@ -227,10 +200,6 @@ void dequePushBack(struct Deque * const deque, void * element) {
         deque -> front_empty = false;
 
     return;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: dequePushBack.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -241,11 +210,7 @@ exit:
  * @param       element pointer to the element to push at the front.
  */
 void dequePushFront(struct Deque * const deque, void * element) {
-    char const * message = NULL;
-    if (deque == NULL) {
-        message = "The parameter <deque> cannot be NULL.";
-        goto exit;
-    }
+    alt_assert(deque != NULL, "The parameter <deque> cannot be NULL.");
 
     unsigned index = deque -> capacity - 1;
 
@@ -253,10 +218,7 @@ void dequePushFront(struct Deque * const deque, void * element) {
     // Same if we ran out of space for front elements
     if (deque -> front_empty || deque -> front == 0) {
         bool front_buffer_ready = bufferPushFront(deque -> buffer, malloc(deque -> capacity * sizeof(void *)));
-        if (! front_buffer_ready) {
-            message = "Failed to allocate space for new elements to push to the front.";
-            goto exit;
-        }
+        alt_assert(front_buffer_ready, "Failed to allocate space for new elements to push to the front.");
     }
 
     // If we haven't pushed anything on the front buffer, we start now
@@ -286,10 +248,6 @@ void dequePushFront(struct Deque * const deque, void * element) {
         deque -> back_empty = false;
     
     return;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: dequePushFront.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -301,12 +259,7 @@ exit:
  * @return      the element at the back of the deque.
  */
 void * dequePopBack(struct Deque * const deque) {
-    char const * message = NULL;
-
-    if (deque == NULL) {
-        message = "The parameter <deque> cannot be NULL.";
-        goto exit;
-    }
+    alt_assert(deque != NULL, "The parameter <deque> cannot be NULL.");
     
     if (deque -> back_empty && deque -> buffer -> size > 1) {
         free(bufferPopBack(deque -> buffer));
@@ -335,10 +288,6 @@ void * dequePopBack(struct Deque * const deque) {
         free(bufferPopBack(deque -> buffer));
 
     return element;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: dequePopBack.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -350,12 +299,7 @@ exit:
  * @return      the element at the front of the deque.
  */
 void * dequePopFront(struct Deque * const deque) {
-    char const * message = NULL;
-
-    if (deque == NULL) {
-        message = "The parameter <deque> cannot be NULL.";
-        goto exit;
-    }
+    alt_assert(deque != NULL, "The parameter <deque> cannot be NULL.");
     
     if (deque -> front_empty && deque -> buffer -> size > 1) {
         free(bufferPopFront(deque -> buffer));
@@ -385,10 +329,6 @@ void * dequePopFront(struct Deque * const deque) {
         free(bufferPopFront(deque -> buffer));
 
     return element;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: dequePopFront.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -400,18 +340,12 @@ exit:
  * @return      the element at the back of the deque.
  */
 void * dequeBack(struct Deque const * const deque) {
-    char const * message = "The parameter <deque> cannot be NULL.";
-    if (deque == NULL)
-        goto exit;
+    alt_assert(deque != NULL, "The parameter <deque> cannot be NULL.");
 
     if (deque -> size == 0)
         return NULL;
     
     return ((void **) bufferGet(deque -> buffer, deque -> buffer -> size - 1))[deque -> back];
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: dequeBack.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -423,18 +357,12 @@ exit:
  * @return      the element at the front of the deque.
  */
 void * dequeFront(struct Deque const * const deque) {
-    char const * message = "The parameter <deque> cannot be NULL.";
-    if (deque == NULL)
-        goto exit;
+    alt_assert(deque != NULL, "The parameter <deque> cannot be NULL.");
 
     if (deque -> size == 0)
         return NULL;
     
     return ((void **) bufferGet(deque -> buffer, 0))[deque -> front];
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: dequeFront.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -446,32 +374,20 @@ exit:
  * @return      the element at the front of the deque.
  */
 void * dequeGet(struct Deque * const deque, unsigned index) {
+    alt_assert(deque != NULL,  "The parameter <deque> cannot be NULL.");
     return _dequeCollectionGet(&deque -> collection, index);
 }
 
 static void * _dequeCollectionGet(struct Collection * const collection, unsigned index) {
     struct Deque const * const deque = (struct Deque const * const) collection;
-    char const * message = NULL;
-
-    if (deque == NULL) {
-        message = "The parameter <deque> cannot be NULL.";
-        goto exit;
-    }
 
     if (deque -> size == 0)
         return NULL;
-
-    if (index >= deque -> size) {
-        message = "Index is out of bounds.";
-        goto exit;
-    }
+    
+    alt_assert(index < deque -> size, "Index is out of bounds.");
 
     unsigned pos = index + deque -> front;
     return ((void **) bufferGet(deque -> buffer, (pos / deque -> capacity) + deque -> front_empty))[pos % deque -> capacity];
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _dequeCollectionGet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 /**
@@ -480,58 +396,30 @@ exit:
  * @param       deque pointer to deque to get the element from.
  */
 void dequeSet(struct Deque * const deque, unsigned index, void * element) {
+    alt_assert(deque != NULL,  "The parameter <deque> cannot be NULL.");
     _dequeCollectionSet(&deque -> collection, index, element);
 }
 
 static void _dequeCollectionSet(struct Collection * const collection, unsigned index, void * element) {
     struct Deque const * const deque = (struct Deque const * const) collection;
-    char const * message = NULL;
 
-    if (deque == NULL) {
-        message = "The parameter <deque> cannot be NULL.";
-        goto exit;
-    }
-
-    if (deque -> size == 0) {
-        message = "Cannot set onto an empty deque.";
-        goto exit;
-    }
-
-    if (index >= deque -> size) {
-        message = "Index is out of bounds.";
-        goto exit;
-    }
+    alt_assert(deque -> size != 0,  "Cannot set onto an empty deque.");
+    alt_assert(index < deque -> size,  "Index is out of bounds.");
 
     unsigned pos = index + deque -> front;
     ((void **) bufferGet(deque -> buffer, (pos / deque -> capacity) + deque -> front_empty))[pos % deque -> capacity] = element;
 
     return;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _dequeCollectionSet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
 static bool _dequeCollectionAtEnd(struct Collection const * const collection, unsigned index) {
+    alt_assert(collection != NULL, "The parameter <collection> cannot be NULL.");
     struct Deque const * const deque = (struct Deque const * const) collection;
-    const char * message = NULL;
 
-    if (deque == NULL) {
-        message = "The parameter <deque> cannot be NULL.";
-        goto exit;
-    }
-
-    if (deque -> size == 0) {
-        message = "The deque is empty, cannot check if at end.";
-        goto exit;
-    }
+    alt_assert(deque -> size != 0, "The deque is empty, cannot check if at end.");
 
     return index >= deque -> size;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _dequeCollectionAtEnd.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 

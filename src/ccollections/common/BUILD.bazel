@@ -1,5 +1,5 @@
 cc_library(
     name = "common",
-    hdrs = ["interfaces.h", "macros.h"],
+    hdrs = ["common.h"],
     visibility = ["//visibility:public"],
 )

@@ -21,7 +21,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include "../common/interfaces.h"
+#include "../common/common.h"
 
 
 struct ListNode {

@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -30,17 +31,7 @@ TEST_F(DequeTest, newDequeTest) {
     EXPECT_EQ(deque -> capacity, 4);
 
     // Check that a different deque with size 0 fails to be created
-    const char formatter[] = "File: %s.\nOperation: newDeque.\nMessage: %s\n";
-    const char file[] = "src/ccollections/deque/deque.c";
-    const char message[] = "Deque capacity cannot be zero.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(newDeque(0), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(newDeque(0), ::testing::HasSubstr("Deque capacity cannot be zero."));
 }
 
 // deleteDeque
@@ -63,18 +54,7 @@ TEST_F(DequeTest, isDequeEmptyTest) {
 
     // We delete the deque, without running into null pointer accesses
     deleteDeque(&deque, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: isDequeEmpty.\nMessage: %s\n";
-    const char file[] = "src/ccollections/deque/deque.c";
-    const char message[] = "The parameter <deque> cannot be NULL.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(isDequeEmpty(deque), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(isDequeEmpty(deque), ::testing::HasSubstr("The parameter <deque> cannot be NULL."));
 }
 
 // isDequeFull
@@ -101,18 +81,7 @@ TEST_F(DequeTest, isDequeFullTest) {
 
     // We delete the deque, we should gracefully fail to check if it is full, without running into null pointer accesses
     deleteDeque(&deque, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: isDequeFull.\nMessage: %s\n";
-    const char file[] = "src/ccollections/deque/deque.c";
-    const char message[] = "The parameter <deque> cannot be NULL.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(isDequeFull(deque), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(isDequeFull(deque), ::testing::HasSubstr("The parameter <deque> cannot be NULL."));
 }
 
 // dequePushBack
@@ -140,18 +109,7 @@ TEST_F(DequeTest, dequePushBackTest) {
 
     // We delete the deque, we should not be able to push onto it
     deleteDeque(&deque, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: dequePushBack.\nMessage: %s\n";
-    const char file[] = "src/ccollections/deque/deque.c";
-    const char message[] = "The parameter <deque> cannot be NULL.";
-
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(dequePushBack(deque, &values[0]), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(dequePushBack(deque, &values[0]), ::testing::HasSubstr("The parameter <deque> cannot be NULL."));
 }
 
 // dequePushFront
@@ -179,18 +137,7 @@ TEST_F(DequeTest, dequePushFrontTest) {
 
     // We delete the deque, we should not be able to push onto it
     deleteDeque(&deque, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: dequePushFront.\nMessage: %s\n";
-    const char file[] = "src/ccollections/deque/deque.c";
-    const char message[] = "The parameter <deque> cannot be NULL.";
-
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(dequePushFront(deque, &values[0]), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(dequePushFront(deque, &values[0]), ::testing::HasSubstr("The parameter <deque> cannot be NULL."));
 }
 
 // dequePopBack
@@ -225,18 +172,7 @@ TEST_F(DequeTest, dequePopBackTest) {
 
     // We delete the deque, we should not be able to pop from it
     deleteDeque(&deque, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: dequePopBack.\nMessage: %s\n";
-    const char file[] = "src/ccollections/deque/deque.c";
-    const char message[] = "The parameter <deque> cannot be NULL.";
-
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(dequePopBack(deque), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(dequePopBack(deque), ::testing::HasSubstr("The parameter <deque> cannot be NULL."));
 }
 
 // dequePopFront
@@ -272,18 +208,7 @@ TEST_F(DequeTest, dequePopFrontTest) {
 
     // We delete the deque, we should not be able to pop from it
     deleteDeque(&deque, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: dequePopFront.\nMessage: %s\n";
-    const char file[] = "src/ccollections/deque/deque.c";
-    const char message[] = "The parameter <deque> cannot be NULL.";
-
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(dequePopFront(deque), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(dequePopFront(deque), ::testing::HasSubstr("The parameter <deque> cannot be NULL."));
 }
 
 // dequeBack
@@ -301,18 +226,7 @@ TEST_F(DequeTest, dequeBackTest) {
 
     // We delete the deque, we should not be able to pop from it
     deleteDeque(&deque, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: dequeBack.\nMessage: %s\n";
-    const char file[] = "src/ccollections/deque/deque.c";
-    const char message[] = "The parameter <deque> cannot be NULL.";
-
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(dequeBack(deque), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(dequeBack(deque), ::testing::HasSubstr("The parameter <deque> cannot be NULL."));
 }
 
 // dequeFront
@@ -330,18 +244,7 @@ TEST_F(DequeTest, dequeFrontTest) {
 
     // We delete the deque, we should not be able to pop from it
     deleteDeque(&deque, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: dequeFront.\nMessage: %s\n";
-    const char file[] = "src/ccollections/deque/deque.c";
-    const char message[] = "The parameter <deque> cannot be NULL.";
-
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(dequeFront(deque), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(dequeFront(deque), ::testing::HasSubstr("The parameter <deque> cannot be NULL."));
 }
 
 // dequeGet
@@ -361,40 +264,20 @@ TEST_F(DequeTest, dequeGetTest) {
     dequePushBack(deque, &values[7]);
     dequePushBack(deque, &values[8]);
 
+    EXPECT_EQ(deque -> size, 9);
+
     EXPECT_EQ(*((int *)(dequeGet(deque, 0))), 1);
     EXPECT_EQ(*((int *)(dequeGet(deque, 4))), 5);
     EXPECT_EQ(*((int *)(dequeGet(deque, 6))), 7);
     EXPECT_EQ(*((int *)(dequeGet(deque, 8))), 9);
 
-
     // We attempt to get an element out of bounds, we should fail
-    const char formatter1[] = "File: %s.\nOperation: _dequeCollectionGet.\nMessage: %s\n";
-    const char file1[] = "src/ccollections/deque/deque.c";
-    const char message1[] = "Index is out of bounds.";
+    EXPECT_DEATH(dequeGet(deque, 9), ::testing::HasSubstr("Index is out of bounds."));
 
-    int size1 = snprintf(NULL, 0, formatter1, file1, message1);
-    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
-    snprintf(expected_message1, size1 + 1, formatter1, file1, message1);
-
-    EXPECT_DEATH(dequeGet(deque, 9), expected_message1);
-
-    free(expected_message1);
-
-
-    // We delete the deque, we should not be able to pop from it
+    // We delete the deque, we should not be able to get an element from it
     deleteDeque(&deque, nullptr);
-
-    const char formatter2[] = "File: %s.\nOperation: _dequeCollectionGet.\nMessage: %s\n";
-    const char file2[] = "src/ccollections/deque/deque.c";
-    const char message2[] = "The parameter <deque> cannot be NULL.";
-
-    int size2 = snprintf(NULL, 0, formatter2, file2, message2);
-    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
-    snprintf(expected_message2, size2 + 1, formatter2, file2, message2);
-
-    EXPECT_DEATH(dequeGet(deque, 0), expected_message2);
-
-    free(expected_message2);
+    EXPECT_EQ(deque, nullptr);
+    EXPECT_DEATH(dequeGet(deque, 0), ::testing::HasSubstr("The parameter <deque> cannot be NULL."));
 }
 
 // dequeSet
@@ -402,18 +285,7 @@ TEST_F(DequeTest, dequeSetTest) {
     int values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     // The deque is empty, We should not be able to set anything
-    const char formatter1[] = "File: %s.\nOperation: _dequeCollectionSet.\nMessage: %s\n";
-    const char file1[] = "src/ccollections/deque/deque.c";
-    const char message1[] = "Cannot set onto an empty deque.";
-
-    int size1 = snprintf(NULL, 0, formatter1, file1, message1);
-    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
-    snprintf(expected_message1, size1 + 1, formatter1, file1, message1);
-
-    EXPECT_DEATH(dequeSet(deque, 0, &values[0]), expected_message1);
-
-    free(expected_message1);
-
+    EXPECT_DEATH(dequeSet(deque, 0, &values[0]), ::testing::HasSubstr("Cannot set onto an empty deque."));
 
     // With elements pushed
     dequePushBack(deque, &values[0]);
@@ -435,33 +307,10 @@ TEST_F(DequeTest, dequeSetTest) {
     dequeSet(deque, 3, &values[0]);
     EXPECT_EQ(*((int *)(dequeGet(deque, 3))), 1);
 
+    // We attempt to set an element out of bounds, we should fail
+    EXPECT_DEATH(dequeSet(deque, 9, &values[0]), ::testing::HasSubstr("Index is out of bounds."));
 
-    // We attempt to get an element out of bounds, we should fail
-    const char formatter2[] = "File: %s.\nOperation: _dequeCollectionSet.\nMessage: %s\n";
-    const char file2[] = "src/ccollections/deque/deque.c";
-    const char message2[] = "Index is out of bounds.";
-
-    int size2 = snprintf(NULL, 0, formatter2, file2, message2);
-    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
-    snprintf(expected_message2, size2 + 1, formatter2, file2, message2);
-
-    EXPECT_DEATH(dequeSet(deque, 9, &values[0]), expected_message2);
-
-    free(expected_message2);
-
-
-    // We delete the deque, we should not be able to pop from it
+    // We delete the deque, we should not be able to set into it
     deleteDeque(&deque, nullptr);
-
-    const char formatter3[] = "File: %s.\nOperation: _dequeCollectionSet.\nMessage: %s\n";
-    const char file3[] = "src/ccollections/deque/deque.c";
-    const char message3[] = "The parameter <deque> cannot be NULL.";
-
-    int size3 = snprintf(NULL, 0, formatter3, file3, message3);
-    char * expected_message3 = (char *) malloc((size3 + 1) * sizeof(char));
-    snprintf(expected_message3, size3 + 1, formatter3, file3, message3);
-
-    EXPECT_DEATH(dequeSet(deque, 0, &values[0]), expected_message3);
-
-    free(expected_message3);
+    EXPECT_DEATH(dequeSet(deque, 0, &values[0]), "The parameter <deque> cannot be NULL.");
 }

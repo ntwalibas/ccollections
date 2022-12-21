@@ -23,7 +23,7 @@
 #include <stddef.h>
 
 
-#include "../common/interfaces.h"
+#include "../common/common.h"
 
 extern float map_growth_factor;
 
@@ -115,7 +115,7 @@ bool hashMapInsert(struct HashMap * const map, unsigned key_len, void const * ke
  *
  * @return      the value associated to the given key.
  */
-void * hashMapGet(struct HashMap const * const map, unsigned key_len, void * key);
+void * hashMapGet(struct HashMap const * const map, unsigned key_len, void const * key);
 
 
 /*
@@ -140,6 +140,6 @@ void * hashMapSet(struct HashMap * const map, unsigned key_len, void const * key
  *
  * @return      true if the value was removed, false otherwise (e.g. the key could not be found).
  */
-bool hashMapDelete(struct HashMap * const map, unsigned key_len, void * key, CDeleter deleter);
+bool hashMapDelete(struct HashMap * const map, unsigned key_len, void const * key, CDeleter deleter);
 
 #endif

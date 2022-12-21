@@ -23,10 +23,11 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "hashset.h"
+#include "../common/common.h"
 #include "siphash.h"
+#include "set.h"
 
-static void * _hashSetCollectionGet(struct Collection const * const collection, unsigned index);
+static void * _hashSetCollectionGet(struct Collection * const collection, unsigned index);
 static bool _hashSetCollectionAtEnd(struct Collection const * const collection, unsigned index);
 
 static void * createItem(unsigned value_len, void * value, uint64_t hash, struct HashSetItem * prev, struct HashSetItem * next);
@@ -41,9 +42,7 @@ float hash_set_growth_factor = 1.75;
  * @return      the newly created set.
  */
 struct HashSet * newHashSet(unsigned initial_capacity) {
-    const char * message = "Initial hash set capacity cannot be zero.";
-    if (initial_capacity == 0)
-        goto exit;
+    alt_assert(initial_capacity != 0, "Initial hash set capacity cannot be zero.");
 
     struct HashSet * set = malloc(sizeof *set);
     if (set == NULL)
@@ -70,10 +69,6 @@ struct HashSet * newHashSet(unsigned initial_capacity) {
     set -> buckets_count = 0;
 
     return set;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: newHashSet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -117,17 +112,8 @@ void deleteHashSet(struct HashSet ** const set, CDeleter deleter) {
  * @return      the newly resized set.
  */
 struct HashSet * resizeHashSet(struct HashSet * const set, unsigned new_capacity) {
-    const char * message = NULL;
-
-    if (set == NULL) {
-        message = "The parameter <set> cannot be NULL.";
-        goto exit;
-    }
-
-    if (new_capacity <= set -> capacity) {
-        message = "The new capacity cannot less or equal to the existing capacity.";
-        goto exit;
-    }
+    alt_assert(set != NULL, "The parameter <set> cannot be NULL.");
+    alt_assert(new_capacity > set -> capacity, "The new capacity cannot less or equal to the existing capacity.");
 
     struct HashSetItem ** items = calloc(new_capacity, sizeof *items);
     if (items == NULL)
@@ -138,7 +124,10 @@ struct HashSet * resizeHashSet(struct HashSet * const set, unsigned new_capacity
         if (item == NULL)
             continue;
         
+        struct HashSetItem * next_item = NULL;
         do {
+            next_item = item -> next;
+
             uint64_t hash = siphash24((char const *) item -> value, item -> value_len, set -> hash_key);
             uint64_t hash_value = hash % new_capacity;
             item -> hash = hash;
@@ -146,8 +135,9 @@ struct HashSet * resizeHashSet(struct HashSet * const set, unsigned new_capacity
                 items[hash_value] -> prev = item;
             item -> next = items[hash_value];
             items[hash_value] = item;
-            item = item -> next;
-        } while (item != NULL);
+
+            item = next_item;
+        } while (next_item != NULL);
     }
 
     free(set -> items);
@@ -155,10 +145,6 @@ struct HashSet * resizeHashSet(struct HashSet * const set, unsigned new_capacity
     set -> capacity = new_capacity;
 
     return set;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: resizeHashSet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -170,15 +156,9 @@ exit:
  * @return      true if the set is empty, false otherwise.
  */
 bool isHashSetEmpty(struct HashSet const * const set) {
-    char const * message = "The parameter <set> cannot be NULL.";
-    if (set == NULL)
-        goto exit;
+    alt_assert(set != NULL, "The parameter <set> cannot be NULL.");
 
     return set -> size == 0;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: isHashSetEmpty.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -190,15 +170,9 @@ exit:
  * @return      true if the set is full, false otherwise.
  */
 bool isHashSetFull(struct HashSet const * const set) {
-    char const * message = "The parameter <set> cannot be NULL.";
-    if (set == NULL)
-        goto exit;
+    alt_assert(set != NULL, "The parameter <set> cannot be NULL.");
 
     return set -> size == set -> capacity;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: isHashSetFull.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -210,17 +184,8 @@ exit:
  * @param       value       pointer to the value to add to the set.
  */
 bool hashSetInsert(struct HashSet * const set, unsigned value_len, void * value) {
-    char const * message = NULL;
-
-    if (set == NULL) {
-        message = "The parameter <set> cannot be NULL.";
-        goto exit;
-    }
-
-    if (value_len == 0) {
-        message = "The size of the value (via value_len) cannot be zero.";
-        goto exit;
-    }
+    alt_assert(set != NULL, "The parameter <set> cannot be NULL.");
+    alt_assert(value_len != 0, "The size of the value (via value_len) cannot be zero.");
 
     // If the load factor exceeds 0.69, we resize the set
     float load_factor = (float)set -> buckets_count / (float)set -> capacity;
@@ -250,10 +215,6 @@ bool hashSetInsert(struct HashSet * const set, unsigned value_len, void * value)
     set -> size++;
 
     return true;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: hashSetInsert.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -266,12 +227,7 @@ exit:
  * @return      true if the value is in the set, false otherwise.
  */
 bool hashSetContains(struct HashSet const * const set, unsigned value_len, void * value) {
-    char const * message = NULL;
-    
-    if (set == NULL) {
-        message = "The parameter <set> cannot be NULL.";
-        goto exit;
-    }
+    alt_assert(set != NULL, "The parameter <set> cannot be NULL.");
 
     if (set -> size == 0)
         return false;
@@ -294,10 +250,6 @@ bool hashSetContains(struct HashSet const * const set, unsigned value_len, void 
     }
 
     return found;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: hashSetContains.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -310,17 +262,8 @@ exit:
  * @return      true if the value was removed, false otherwise.
  */
 bool hashSetDelete(struct HashSet * const set, unsigned value_len, void * value, CDeleter deleter) {
-    char const * message = NULL;
-
-    if (set == NULL) {
-        message = "The parameter <set> cannot be NULL.";
-        goto exit;
-    }
-
-    if (value_len == 0) {
-       message = "The size of the value (via value_len) cannot be zero.";
-        goto exit;
-    }
+    alt_assert(set != NULL, "The parameter <set> cannot be NULL.");
+    alt_assert(value_len != 0, "The size of the value (via value_len) cannot be zero.");
 
     uint64_t hash = siphash24((char const *) value, value_len, set -> hash_key);
     uint64_t hash_value = hash % set -> capacity;
@@ -360,31 +303,16 @@ bool hashSetDelete(struct HashSet * const set, unsigned value_len, void * value,
     } while(existing_item != NULL);
 
     return false;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: hashSetDelete.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
-static void * _hashSetCollectionGet(struct Collection const * const collection, unsigned index) {
+static void * _hashSetCollectionGet(struct Collection * const collection, unsigned index) {
+    alt_assert(collection != NULL, "The parameter <collection> cannot be NULL.");
+
     struct HashSet const * const set = (struct HashSet const * const) collection;
-    char const * message = NULL;
-
-    if (set == NULL) {
-        message = "The parameter <set> cannot be NULL.";
-        goto exit;
-    }
-
-    if (set -> size == 0) {
-        message = "The hash set is empty, cannot get items.";
-        goto exit;
-    }
-
-    if (index >= set -> size) {
-        message = "The index is out of bounds.";
-        goto exit;
-    }
+    
+    alt_assert(set -> size > 0, "The hash set is empty, cannot get items.");
+    alt_assert(index < set -> size, "The index is out of bounds.");
 
     unsigned shadow_index = 0;
     for (int i = 0; i < set -> capacity; i++) {
@@ -402,32 +330,15 @@ static void * _hashSetCollectionGet(struct Collection const * const collection, 
     }
 
     return NULL;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _hashSetCollectionGet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
 static bool _hashSetCollectionAtEnd(struct Collection const * const collection, unsigned index) {
+    alt_assert(collection != NULL, "The parameter <collection> cannot be NULL.");
+    
     struct HashSet const * const set = (struct HashSet const * const) collection;
-    const char * message = NULL;
-
-    if (set == NULL) {
-        message = "The parameter <set> cannot be NULL.";
-        goto exit;
-    }
-
-    if (set -> size == 0) {
-        message = "The hash  set is empty, cannot check if at end.";
-        goto exit;
-    }
 
     return index >= set -> size;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _hashSetCollectionAtEnd.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 

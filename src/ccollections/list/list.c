@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "../common/common.h"
 #include "list.h"
 
 static void * _listCollectionGet(struct Collection * const collection, unsigned index);
@@ -90,15 +91,9 @@ void deleteList(struct List ** const list, CDeleter deleter) {
  * @return      true if the list is empty, false otherwise.
  */
 bool isListEmpty(struct List const * const list) {
-    char const * message = "The parameter <list> cannot be NULL.";
-    if (list == NULL)
-        goto exit;
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
 
     return list -> size == 0;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: isListEmpty.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -109,9 +104,7 @@ exit:
  * @param       element pointer to the element to push back.
  */
 void listPushBack(struct List * const list, void * element) {
-    char const * message = "The parameter <list> cannot be NULL.";
-    if (list == NULL)
-        goto exit;
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
 
     struct ListNode * new_tail = createListNode(element);
     if (list -> size == 0) {
@@ -127,11 +120,8 @@ void listPushBack(struct List * const list, void * element) {
     }
 
     list -> size++;
-    return;
 
-exit:
-    fprintf(stderr, "File: %s.\nOperation: listPushBack.\nMessage: %s\n", __FILE__, message);
-    exit(74);
+    return;
 }
 
 
@@ -142,9 +132,7 @@ exit:
  * @param       element pointer to the element to push at the front.
  */
 void listPushFront(struct List * const list, void * element) {
-    char const * message = "The parameter <list> cannot be NULL.";
-    if (list == NULL)
-        goto exit;
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
 
     struct ListNode * new_head = createListNode(element);
     if (list -> size == 0) {
@@ -160,11 +148,8 @@ void listPushFront(struct List * const list, void * element) {
     }
 
     list -> size++;
-    return;
 
-exit:
-    fprintf(stderr, "File: %s.\nOperation: listPushFront.\nMessage: %s\n", __FILE__, message);
-    exit(74);
+    return;
 }
 
 
@@ -176,9 +161,7 @@ exit:
  * @return      the element at the back of the list.
  */
 void * listPopBack(struct List * const list) {
-    char const * message = "The parameter <list> cannot be NULL.";
-    if (list == NULL)
-        goto exit;
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
 
     if (list -> size == 0)
         return NULL;
@@ -197,10 +180,6 @@ void * listPopBack(struct List * const list) {
     deleteListNode(old_tail, NULL);
 
     return element;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: listPopBack.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -212,9 +191,7 @@ exit:
  * @return      the element at the front of the list.
  */
 void * listPopFront(struct List * const list) {
-    char const * message = "The parameter <list> cannot be NULL.";
-    if (list == NULL)
-        goto exit;
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
 
     if (list -> size == 0)
         return NULL;
@@ -233,10 +210,6 @@ void * listPopFront(struct List * const list) {
     deleteListNode(old_head, NULL);
 
     return element;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: listPopFront.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -248,18 +221,12 @@ exit:
  * @return      the element at the back of the list.
  */
 void * listBack(struct List const * const list) {
-    char const * message = "The parameter <list> cannot be NULL.";
-    if (list == NULL)
-        goto exit;
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
 
     if (list -> size == 0)
         return NULL;
     
     return list -> tail -> element;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: listBack.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -271,18 +238,12 @@ exit:
  * @return      the element at the front of the list.
  */
 void * listFront(struct List const * const list) {
-    char const * message = "The parameter <list> cannot be NULL.";
-    if (list == NULL)
-        goto exit;
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
 
     if (list -> size == 0)
         return NULL;
     
     return list -> head -> element;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: listFront.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -294,22 +255,14 @@ exit:
  * @return      the element at the front of the list.
  */
 void * listGet(struct List * const list, unsigned index) {
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
     return _listCollectionGet(&list -> collection, index);
 }
 
 static void * _listCollectionGet(struct Collection * const collection, unsigned index) {
     struct List * const list = (struct List * const) collection;
-    char const * message = NULL;
-    
-    if (list == NULL) {
-        message = "The parameter <list> cannot be NULL.";
-        goto exit;
-    }
 
-    if (index >= list -> size) {
-        message = "Index is out of bounds.";
-        goto exit;
-    }
+    alt_assert(index < list -> size,  "Index is out of bounds.");
 
     if (list -> size == 0)
         return NULL;
@@ -321,10 +274,6 @@ static void * _listCollectionGet(struct Collection * const collection, unsigned 
     }
 
     return list -> current_node -> element;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _listCollectionGet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -334,22 +283,14 @@ exit:
  * @param       list pointer to list to get the element from.
  */
 void listSet(struct List * const list, unsigned index, void * element) {
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
     _listCollectionSet(&list -> collection, index, element);
 }
 
 static void _listCollectionSet(struct Collection * const collection, unsigned index, void * element) {
     struct List * const list = (struct List * const) collection;
-    char const * message = NULL;
-    
-    if (list == NULL) {
-        message = "The parameter <list> cannot be NULL.";
-        goto exit;
-    }
 
-    if (index >= list -> size) {
-        message = "Index is out of bounds.";
-        goto exit;
-    }
+    alt_assert(index < list -> size,  "Index is out of bounds.");
     
     bool move_right = (index > list -> current_index) ? true : false;
     while (list -> current_index != index) {
@@ -359,10 +300,6 @@ static void _listCollectionSet(struct Collection * const collection, unsigned in
 
     list -> current_node -> element = element;
     return;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _listCollectionSet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -374,17 +311,8 @@ exit:
  * @param       element the element to insert.
  */
 void listInsert(struct List * const list, unsigned index, void * element) {
-    char const * message = NULL;
-    
-    if (list == NULL) {
-        message = "The parameter <list> cannot be NULL.";
-        goto exit;
-    }
-
-    if (index >= list -> size) {
-        message = "Index is out of bounds.";
-        goto exit;
-    }
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
+    alt_assert(index < list -> size,  "Index is out of bounds.");
     
     bool move_right = (index > list -> current_index) ? true : false;
     while (list -> current_index != index) {
@@ -411,11 +339,8 @@ void listInsert(struct List * const list, unsigned index, void * element) {
         list -> tail = new_node;
 
     list -> size++;
-    return;
 
-exit:
-    fprintf(stderr, "File: %s.\nOperation: listInsert.\nMessage: %s\n", __FILE__, message);
-    exit(74);
+    return;
 }
 
 
@@ -425,40 +350,22 @@ exit:
  * @param       list pointer to list to get the element from.
  */
 void listResetCurrent(struct List * const list) {
-    char const * message = "The parameter <list> cannot be NULL.";
-    if (list == NULL)
-        goto exit;
+    alt_assert(list != NULL, "The parameter <list> cannot be NULL.");
 
     list -> current_node = list -> head;
     list -> current_index = 0;
 
     return;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: listResetCurrent.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
 static bool _listCollectionAtEnd(struct Collection const * const collection, unsigned index) {
+    alt_assert(collection != NULL, "The parameter <list> cannot be NULL.");
     struct List const * const list = (struct List const * const) collection;
-    char const * message = NULL;
-    
-    if (list == NULL) {
-        message = "The parameter <list> cannot be NULL.";
-        goto exit;
-    }
 
-    if (list -> size == 0) {
-        message = "The list is empty, cannot check if at end.";
-        goto exit;
-    }
+    alt_assert(list -> size > 0, "The list is empty, cannot check if at end.");
     
     return index >= list -> size - 1;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _listCollectionAtEnd.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 

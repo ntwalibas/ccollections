@@ -23,10 +23,11 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "hashmap.h"
+#include "../common/common.h"
 #include "siphash.h"
+#include "map.h"
 
-static void * _hashMapCollectionGet(struct Collection const * const collection, unsigned index);
+static void * _hashMapCollectionGet(struct Collection * const collection, unsigned index);
 static bool _hashMapCollectionAtEnd(struct Collection const * const collection, unsigned index);
 
 static void * createItem(unsigned key_len, void const * key, void * value,
@@ -42,9 +43,7 @@ float hash_map_growth_factor = 1.75;
  * @return      the newly created map.
  */
 struct HashMap * newHashMap(unsigned initial_capacity) {
-    const char * message = "Initial hash map capacity cannot be zero.";
-    if (initial_capacity == 0)
-        goto exit;
+    alt_assert(initial_capacity > 0, "Initial hash map capacity cannot be zero.");
 
     struct HashMap * map = malloc(sizeof *map);
     if (map == NULL)
@@ -71,10 +70,6 @@ struct HashMap * newHashMap(unsigned initial_capacity) {
     map -> buckets_count = 0;
 
     return map;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: newHashMap.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -118,17 +113,8 @@ void deleteHashMap(struct HashMap ** const map, CDeleter deleter) {
  * @return      the newly resized map.
  */
 struct HashMap * resizeHashMap(struct HashMap * const map, unsigned new_capacity) {
-    const char * message = NULL;
-
-    if (map == NULL) {
-        message = "The parameter <map> cannot be NULL.";
-        goto exit;
-    }
-
-    if (new_capacity <= map -> capacity) {
-        message = "The new capacity cannot less or equal to the existing capacity.";
-        goto exit;
-    }
+    alt_assert(map != NULL, "The parameter <map> cannot be NULL.");
+    alt_assert(new_capacity > map -> capacity, "The new capacity cannot be less or equal to the existing capacity.");
 
     struct HashMapItem ** items = calloc(new_capacity, sizeof *items);
     if (items == NULL)
@@ -139,7 +125,10 @@ struct HashMap * resizeHashMap(struct HashMap * const map, unsigned new_capacity
         if (item == NULL)
             continue;
         
+        struct HashMapItem * next_item = NULL;
         do {
+            next_item = item -> next;
+
             uint64_t hash = siphash24((char const *) item -> key, item -> key_len, map -> hash_key);
             uint64_t hash_key = hash % new_capacity;
             item -> hash = hash;
@@ -147,8 +136,9 @@ struct HashMap * resizeHashMap(struct HashMap * const map, unsigned new_capacity
                 items[hash_key] -> prev = item;
             item -> next = items[hash_key];
             items[hash_key] = item;
-            item = item -> next;
-        } while (item != NULL);
+
+            item = next_item;
+        } while (next_item != NULL);
     }
 
     free(map -> items);
@@ -156,10 +146,6 @@ struct HashMap * resizeHashMap(struct HashMap * const map, unsigned new_capacity
     map -> capacity = new_capacity;
 
     return map;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: resizeHashMap.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -171,15 +157,9 @@ exit:
  * @return      true if the map is empty, false otherwise.
  */
 bool isHashMapEmpty(struct HashMap const * const map) {
-    char const * message = "The parameter <map> cannot be NULL.";
-    if (map == NULL)
-        goto exit;
+    alt_assert(map != NULL, "The parameter <map> cannot be NULL.");
 
     return map -> size == 0;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: isHashMapEmpty.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -191,15 +171,9 @@ exit:
  * @return      true if the map is full, false otherwise.
  */
 bool isHashMapFull(struct HashMap const * const map) {
-    char const * message = "The parameter <map> cannot be NULL.";
-    if (map == NULL)
-        goto exit;
+    alt_assert(map != NULL, "The parameter <map> cannot be NULL.");
 
     return map -> size == map -> capacity;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: isHashMapFull.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -212,17 +186,8 @@ exit:
  * @param       value   pointer to the value to add to the map.
  */
 bool hashMapInsert(struct HashMap * const map, unsigned key_len, void const * key, void * value) {
-    char const * message = NULL;
-
-    if (map == NULL) {
-        message = "The parameter <map> cannot be NULL.";
-        goto exit;
-    }
-
-    if (key_len == 0) {
-        message = "The key (via key_len) cannot be zero.";
-        goto exit;
-    }
+    alt_assert(map != NULL, "The parameter <map> cannot be NULL.");
+    alt_assert(key_len > 0, "The key (via key_len) cannot be zero.");
 
     // If the load factor exceeds 0.69, we resize the map
     float load_factor = (float)map -> buckets_count / (float)map -> capacity;
@@ -237,11 +202,10 @@ bool hashMapInsert(struct HashMap * const map, unsigned key_len, void const * ke
     uint64_t hash_key = hash % map -> capacity;
 
     struct HashMapItem * existing_item = map -> items[hash_key];
-    if (existing_item != NULL && existing_item -> hash == hash) {
-        message = "Key already exists in map";
-        goto exit;
-    }
-    // Calculate the load factor
+    if (existing_item != NULL)
+        alt_assert(existing_item -> hash != hash, "An element with the given key already exists in the hash map.");
+
+    // Update load_factor independent variable buckets_count
     if (existing_item == NULL)
         map -> buckets_count += 1;
 
@@ -252,10 +216,6 @@ bool hashMapInsert(struct HashMap * const map, unsigned key_len, void const * ke
     map -> size++;
 
     return true;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: hashMapInsert.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -267,18 +227,9 @@ exit:
  *
  * @return      the value associated to the given key.
  */
-void * hashMapGet(struct HashMap const * const map, unsigned key_len, void * key) {
-    char const * message = NULL;
-    
-    if (map == NULL) {
-        message = "The parameter <map> cannot be NULL.";
-        goto exit;
-    }
-
-    if (map -> size == 0) {
-        message = "The hash map is empty, cannot get elements.";
-        goto exit;
-    }
+void * hashMapGet(struct HashMap const * const map, unsigned key_len, void const * key) {
+    alt_assert(map != NULL, "The parameter <map> cannot be NULL.");
+    alt_assert(map -> size > 0, "The hash map is empty, cannot get elements.");
 
     uint64_t hash = siphash24((char const *) key, key_len, map -> hash_key);
     uint64_t hash_key = hash % map -> capacity;
@@ -298,10 +249,6 @@ void * hashMapGet(struct HashMap const * const map, unsigned key_len, void * key
     }
 
     return found ? item -> value : NULL;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: hashMapGet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -316,17 +263,8 @@ exit:
  * @return      the value that was replaced if done, otherwise NULL.
  */
 void * hashMapSet(struct HashMap * const map, unsigned key_len, void const * key, void * value) {
-    char const * message = NULL;
-
-    if (map == NULL) {
-        message = "The parameter <map> cannot be NULL.";
-        goto exit;
-    }
-
-    if (key_len == 0) {
-        message = "The key (via key_len) cannot be zero.";
-        goto exit;
-    }
+    alt_assert(map != NULL, "The parameter <map> cannot be NULL.");
+    alt_assert(key_len > 0, "The key (via key_len) cannot be zero.");
 
     uint64_t hash = siphash24((char const *) key, key_len, map -> hash_key);
     uint64_t hash_key = hash % map -> capacity;
@@ -357,10 +295,6 @@ void * hashMapSet(struct HashMap * const map, unsigned key_len, void const * key
     // In this case, the key-value pair needs to be added to the existing items bucket
     hashMapInsert(map, key_len, key, value);
     return NULL;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: hashMapSet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -372,18 +306,9 @@ exit:
  *
  * @return      true if the value was removed, false otherwise (e.g. the key could not be found).
  */
-bool hashMapDelete(struct HashMap * const map, unsigned key_len, void * key, CDeleter deleter) {
-    char const * message = NULL;
-
-    if (map == NULL) {
-        message = "The parameter <map> cannot be NULL.";
-        goto exit;
-    }
-
-    if (key_len == 0) {
-        message = "The key (via key_len) cannot be zero.";
-        goto exit;
-    }
+bool hashMapDelete(struct HashMap * const map, unsigned key_len, void const * key, CDeleter deleter) {
+    alt_assert(map != NULL, "The parameter <map> cannot be NULL.");
+    alt_assert(key_len > 0, "The key (via key_len) cannot be zero.");
 
     uint64_t hash = siphash24((char const *) key, key_len, map -> hash_key);
     uint64_t hash_key = hash % map -> capacity;
@@ -423,31 +348,18 @@ bool hashMapDelete(struct HashMap * const map, unsigned key_len, void * key, CDe
     } while(existing_item != NULL);
 
     return false;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: hashMapDelete.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
-static void * _hashMapCollectionGet(struct Collection const * const collection, unsigned index) {
+static void * _hashMapCollectionGet(struct Collection * const collection, unsigned index) {
+    alt_assert(collection != NULL, "The parameter <collection> cannot be NULL.");
+
     struct HashMap const * const map = (struct HashMap const * const) collection;
-    char const * message = NULL;
 
-    if (map == NULL) {
-        message = "The parameter <map> cannot be NULL.";
-        goto exit;
-    }
+    if (map -> size == 0)
+        return NULL;
 
-    if (map -> size == 0) {
-        message = "The hash map is empty, cannot get items.";
-        goto exit;
-    }
-
-    if (index >= map -> size) {
-        message = "The index is out of bounds.";
-        goto exit;
-    }
+    alt_assert(index < map -> size, "The index is out of bounds.");
 
     unsigned shadow_index = 0;
     for (int i = 0; i < map -> capacity; i++) {
@@ -465,36 +377,26 @@ static void * _hashMapCollectionGet(struct Collection const * const collection, 
     }
 
     return NULL;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _hashMapCollectionGet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
 static bool _hashMapCollectionAtEnd(struct Collection const * const collection, unsigned index) {
+    alt_assert(collection != NULL, "The parameter <collection> cannot be NULL.");
+
     struct HashMap const * const map = (struct HashMap const * const) collection;
-    const char * message = NULL;
-
-    if (map == NULL) {
-        message = "The parameter <map> cannot be NULL.";
-        goto exit;
-    }
-
-    if (map -> size == 0) {
-        message = "The hash  map is empty, cannot check if at end.";
-        goto exit;
-    }
 
     return index >= map -> size;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _hashMapCollectionAtEnd.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
-static void * createItem(unsigned key_len, void const * key, void * value, uint64_t hash, struct HashMapItem * prev, struct HashMapItem * next) {
+static void * createItem(
+    unsigned key_len,
+    void const * key,
+    void * value,
+    uint64_t hash,
+    struct HashMapItem * prev,
+    struct HashMapItem * next
+) {
     struct HashMapItem * item = malloc(sizeof *item);
     if (item == NULL)
         return NULL;

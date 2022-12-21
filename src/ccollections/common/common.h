@@ -20,14 +20,25 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <assert.h>
 
+// Structs
 struct Collection {
     void * (* get)(struct Collection * const collection, unsigned index);
     void (* set)(struct Collection * const collection, unsigned index, void * element);
     bool (* atEnd)(struct Collection const * const collection, unsigned index);
 };
+// ! Structs
 
+
+// Function pointers
 typedef int (* CComparator)(void const * a, void const * b);
 typedef void (* CDeleter)(void ** element);
+// ! Function pointers
+
+
+// Macros
+#define alt_assert(test, message) assert(((void)(message), test))
+// ! Macros
 
 #endif

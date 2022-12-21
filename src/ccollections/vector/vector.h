@@ -22,7 +22,7 @@
 #include <stddef.h>
 
 
-#include "../common/interfaces.h"
+#include "../common/common.h"
 
 extern float vector_growth_factor;
 
@@ -76,8 +76,10 @@ bool isVectorEmpty(struct Vector const * const vector);
  *
  * @param       vector pointer to vector to append an element to.
  * @param       element pointer to the element to append to the vector.
+ *
+ * @return      true if the element was added, false otherwise (probably due to insufficient memory)
  */
-void vectorPushBack(struct Vector * const vector, void * element);
+bool vectorPushBack(struct Vector * const vector, void * element);
 
 
 /**

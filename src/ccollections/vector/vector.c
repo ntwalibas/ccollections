@@ -21,9 +21,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "../common/common.h"
 #include "vector.h"
 
-static void * _vectorCollectionGet(struct Collection const * const collection, unsigned index);
+static void * _vectorCollectionGet(struct Collection * const collection, unsigned index);
 static void _vectorCollectionSet(struct Collection * const collection, unsigned index, void * element);
 static bool _vectorCollectionAtEnd(struct Collection const * const collection, unsigned index);
 
@@ -36,9 +37,7 @@ float vector_growth_factor = 1.75;
  * @return      the newly created vector.
  */
 struct Vector * newVector(unsigned initial_capacity) {
-    const char * message = "Initial vector capacity cannot be zero.";
-    if(initial_capacity == 0)
-        goto exit;
+    alt_assert(initial_capacity > 0, "Initial vector capacity cannot be zero.");
 
     struct Vector * vector = malloc(sizeof *vector);
     if (vector == NULL)
@@ -61,10 +60,6 @@ struct Vector * newVector(unsigned initial_capacity) {
     vector -> size = 0;
 
     return vector;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: newVector.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -102,17 +97,8 @@ void deleteVector(struct Vector ** const vector, CDeleter deleter) {
  * @return      the newly resized vector.
  */
 struct Vector * resizeVector(struct Vector * const vector, unsigned new_capacity) {
-    const char * message = NULL;
-    
-    if (vector == NULL) {
-        message = "The parameter <vector> cannot be NULL.";
-        goto exit;
-    }
-
-    if (new_capacity <= vector -> capacity) {
-        message = "The new capacity cannot less or equal to the existing capacity.";
-        goto exit;
-    }
+    alt_assert(vector != NULL, "The parameter <vector> cannot be NULL.");
+    alt_assert(new_capacity > vector -> capacity, "The new capacity cannot be less or equal to the existing capacity.");
 
     void ** new_elements = realloc(vector -> elements, new_capacity * sizeof *vector -> elements);
     if (new_elements == NULL)
@@ -122,10 +108,6 @@ struct Vector * resizeVector(struct Vector * const vector, unsigned new_capacity
     vector -> capacity = new_capacity;
 
     return vector;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: resizeVector.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -137,15 +119,9 @@ exit:
  * @return      true if the vector is empty, false otherwise.
  */
 bool isVectorEmpty(struct Vector const * const vector) {
-    char const * message = "The parameter <vector> cannot be NULL.";
-    if (vector == NULL)
-        goto exit;
+    alt_assert(vector != NULL, "The parameter <vector> cannot be NULL.");
 
     return vector -> size == 0;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: isVectorEmpty.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -154,22 +130,17 @@ exit:
  *
  * @param       vector pointer to vector to append an element to.
  * @param       element pointer to the element to append to the vector.
+ *
+ * @return      true if the element was added, false otherwise (probably due to insufficient memory)
  */
-void vectorPushBack(struct Vector * const vector, void * element) {
-    char const * message = NULL;
-    
-    if (vector == NULL) {
-        message = "The parameter <vector> cannot be NULL.";
-        goto exit;
-    }
+bool vectorPushBack(struct Vector * const vector, void * element) {
+    alt_assert(vector != NULL, "The parameter <vector> cannot be NULL.");
 
     if (vector -> size == vector -> capacity) {
         unsigned new_capacity = vector_growth_factor * vector -> capacity;
         void ** new_elements = realloc(vector -> elements, new_capacity * sizeof *vector -> elements);
-        if (new_elements == NULL) {
-            message = "Failed to allocate space for new elements.";
-            goto exit;
-        }
+        if (new_elements == NULL)
+            return false;
 
         vector -> elements = new_elements;
         vector -> capacity = new_capacity;
@@ -177,11 +148,7 @@ void vectorPushBack(struct Vector * const vector, void * element) {
 
     vector -> elements[vector -> size++] = element;
 
-    return;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: vectorPushBack.\nMessage: %s\n", __FILE__, message);
-    exit(74);
+    return true;
 }
 
 
@@ -194,33 +161,19 @@ exit:
  * @return      the element at the specified index.
  */
 void * vectorGet(struct Vector const * const vector, unsigned index) {
+    alt_assert(vector != NULL, "The parameter <vector> cannot be NULL.");
     return _vectorCollectionGet(&vector -> collection, index);
 }
 
-static void * _vectorCollectionGet(struct Collection const * const collection, unsigned index) {
+static void * _vectorCollectionGet(struct Collection * const collection, unsigned index) {
+    alt_assert(collection != NULL, "The parameter <collection> cannot be NULL.");
+
     struct Vector const * const vector = (struct Vector const * const) collection;
-    char const * message = NULL;
-    
-    if (vector == NULL) {
-        message = "The parameter <vector> cannot be NULL.";
-        goto exit;
-    }
 
-    if (vector -> size == 0) {
-        message = "The vector is empty, cannot get elements.";
-        goto exit;
-    }
-
-    if (index >= vector -> size) {
-        message = "The index is out of bounds.";
-        goto exit;
-    }
+    alt_assert(vector -> size > 0, "The vector is empty, cannot get elements.");
+    alt_assert(index < vector -> size, "The index is out of bounds.");
 
     return vector -> elements[index];
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _vectorCollectionGet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
@@ -232,55 +185,28 @@ exit:
  * @param       element the element to write at the specified index.
  */
 void vectorSet(struct Vector * const vector, unsigned index, void * element) {
+    alt_assert(vector != NULL, "The parameter <vector> cannot be NULL.");
     return _vectorCollectionSet(&vector -> collection, index, element);
 }
 
 static void _vectorCollectionSet(struct Collection * const collection, unsigned index, void * element) {
+    alt_assert(collection != NULL, "The parameter <collection> cannot be NULL.");
+
     struct Vector * const vector = (struct Vector * const) collection;
-    char const * message = NULL;
 
-    if (vector == NULL) {
-        message = "The parameter <vector> cannot be NULL.";
-        goto exit;
-    }
-
-    if (vector -> size == 0) {
-        message = "The vector is empty, cannot set elements.";
-        goto exit;
-    }
-
-    if (index >= vector -> size) {
-        message = "The index is out of bounds.";
-        goto exit;
-    }
+    alt_assert(vector -> size > 0, "The vector is empty, cannot set elements.");
+    alt_assert(index < vector -> size, "The index is out of bounds.");
 
     vector -> elements[index] = element;
     return;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _vectorCollectionSet.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 
 
 static bool _vectorCollectionAtEnd(struct Collection const * const collection, unsigned index) {
+    alt_assert(collection != NULL, "The parameter <collection> cannot be NULL.");
+
     struct Vector const * const vector = (struct Vector const * const) collection;
-    const char * message = NULL;
-
-    if (vector == NULL) {
-        message = "The parameter <vector> cannot be NULL.";
-        goto exit;
-    }
-
-    if (vector -> size == 0) {
-        message = "The vector is empty, cannot check if at end.";
-        goto exit;
-    }
 
     return index >= vector -> size;
-
-exit:
-    fprintf(stderr, "File: %s.\nOperation: _vectorCollectionAtEnd.\nMessage: %s\n", __FILE__, message);
-    exit(74);
 }
 

@@ -1,7 +1,7 @@
 cc_library(
     name = "map",
-    srcs = ["hashmap.c", "siphash.c"],
-    hdrs = ["hashmap.h", "siphash.h"],
+    srcs = ["map.c", "siphash.c"],
+    hdrs = ["map.h", "siphash.h"],
     visibility = ["//visibility:public"],
     deps = ["//src/ccollections/common:common"],
 )

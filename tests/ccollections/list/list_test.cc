@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -41,18 +42,7 @@ TEST_F(ListTest, isListEmptyTest) {
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: isListEmpty.\nMessage: %s\n";
-    const char file[] = "src/ccollections/list/list.c";
-    const char message[] = "The parameter <list> cannot be NULL.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(isListEmpty(list), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(isListEmpty(list), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }
 
 // listPushBack
@@ -73,18 +63,7 @@ TEST_F(ListTest, listPushBackTest) {
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: listPushBack.\nMessage: %s\n";
-    const char file[] = "src/ccollections/list/list.c";
-    const char message[] = "The parameter <list> cannot be NULL.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(listPushBack(list, &values[0]), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(listPushBack(list, &values[0]), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }
 
 // listPushFront
@@ -105,18 +84,7 @@ TEST_F(ListTest, listPushFrontTest) {
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: listPushFront.\nMessage: %s\n";
-    const char file[] = "src/ccollections/list/list.c";
-    const char message[] = "The parameter <list> cannot be NULL.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(listPushFront(list, &values[0]), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(listPushFront(list, &values[0]), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }
 
 // listPopBack
@@ -141,18 +109,7 @@ TEST_F(ListTest, listPopBackTest) {
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: listPopBack.\nMessage: %s\n";
-    const char file[] = "src/ccollections/list/list.c";
-    const char message[] = "The parameter <list> cannot be NULL.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(listPopBack(list), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(listPopBack(list), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }
 
 // listPopFront
@@ -179,18 +136,7 @@ TEST_F(ListTest, listPopFrontTest) {
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: listPopFront.\nMessage: %s\n";
-    const char file[] = "src/ccollections/list/list.c";
-    const char message[] = "The parameter <list> cannot be NULL.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(listPopFront(list), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(listPopFront(list), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }
 
 // listBack
@@ -211,18 +157,7 @@ TEST_F(ListTest, listBackTest) {
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: listBack.\nMessage: %s\n";
-    const char file[] = "src/ccollections/list/list.c";
-    const char message[] = "The parameter <list> cannot be NULL.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(listBack(list), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(listBack(list), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }
 
 // listFront
@@ -243,18 +178,7 @@ TEST_F(ListTest, listFrontTest) {
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter[] = "File: %s.\nOperation: listFront.\nMessage: %s\n";
-    const char file[] = "src/ccollections/list/list.c";
-    const char message[] = "The parameter <list> cannot be NULL.";
-    
-    int size = snprintf(NULL, 0, formatter, file, message);
-    char * expected_message = (char *) malloc((size + 1) * sizeof(char));
-    snprintf(expected_message, size + 1, formatter, file, message);
-
-    EXPECT_DEATH(listFront(list), expected_message);
-
-    free(expected_message);
+    EXPECT_DEATH(listFront(list), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }
 
 // listGet
@@ -277,33 +201,11 @@ TEST_F(ListTest, listGetTest) {
 
 
     // Inde is out of bounds
-    const char formatter1[] = "File: %s.\nOperation: _listCollectionGet.\nMessage: %s\n";
-    const char file1[] = "src/ccollections/list/list.c";
-    const char message1[] = "Index is out of bounds.";
-    
-    int size1 = snprintf(NULL, 0, formatter1, file1, message1);
-    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
-    snprintf(expected_message1, size1 + 1, formatter1, file1, message1);
-
-    EXPECT_DEATH(listGet(list, -1), expected_message1);
-
-    free(expected_message1);
-
+    EXPECT_DEATH(listGet(list, -1), ::testing::HasSubstr("Index is out of bounds."));
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter2[] = "File: %s.\nOperation: _listCollectionGet.\nMessage: %s\n";
-    const char file2[] = "src/ccollections/list/list.c";
-    const char message2[] = "The parameter <list> cannot be NULL.";
-    
-    int size2 = snprintf(NULL, 0, formatter2, file2, message2);
-    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
-    snprintf(expected_message2, size2 + 1, formatter2, file2, message2);
-
-    EXPECT_DEATH(listGet(list, 0), expected_message2);
-
-    free(expected_message2);
+    EXPECT_DEATH(listGet(list, 0), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }
 
 // listSet
@@ -333,33 +235,11 @@ TEST_F(ListTest, listSetTest) {
 
 
     // Inde is out of bounds
-    const char formatter1[] = "File: %s.\nOperation: _listCollectionSet.\nMessage: %s\n";
-    const char file1[] = "src/ccollections/list/list.c";
-    const char message1[] = "Index is out of bounds.";
-    
-    int size1 = snprintf(NULL, 0, formatter1, file1, message1);
-    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
-    snprintf(expected_message1, size1 + 1, formatter1, file1, message1);
-
-    EXPECT_DEATH(listSet(list, -1, &values[0]), expected_message1);
-
-    free(expected_message1);
-
+    EXPECT_DEATH(listSet(list, -1, &values[0]), ::testing::HasSubstr("Index is out of bounds."));
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter2[] = "File: %s.\nOperation: _listCollectionSet.\nMessage: %s\n";
-    const char file2[] = "src/ccollections/list/list.c";
-    const char message2[] = "The parameter <list> cannot be NULL.";
-    
-    int size2 = snprintf(NULL, 0, formatter2, file2, message2);
-    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
-    snprintf(expected_message2, size2 + 1, formatter2, file2, message2);
-
-    EXPECT_DEATH(listSet(list, 0, &values[0]), expected_message2);
-
-    free(expected_message2);
+    EXPECT_DEATH(listSet(list, 0, &values[0]), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }
 
 // listInsert
@@ -390,33 +270,10 @@ TEST_F(ListTest, listInsertTest) {
     EXPECT_EQ(*((int *)list -> head -> element), -1);
     EXPECT_EQ(*((int *)list -> tail -> element), 6);
 
-
     // Inde is out of bounds
-    const char formatter1[] = "File: %s.\nOperation: listInsert.\nMessage: %s\n";
-    const char file1[] = "src/ccollections/list/list.c";
-    const char message1[] = "Index is out of bounds.";
-    
-    int size1 = snprintf(NULL, 0, formatter1, file1, message1);
-    char * expected_message1 = (char *) malloc((size1 + 1) * sizeof(char));
-    snprintf(expected_message1, size1 + 1, formatter1, file1, message1);
-
-    EXPECT_DEATH(listInsert(list, -1, &values[0]), expected_message1);
-
-    free(expected_message1);
-
+    EXPECT_DEATH(listInsert(list, -1, &values[0]), ::testing::HasSubstr("Index is out of bounds."));
 
     // We delete the list, without running into null pointer accesses
     deleteList(&list, nullptr);
-
-    const char formatter2[] = "File: %s.\nOperation: listInsert.\nMessage: %s\n";
-    const char file2[] = "src/ccollections/list/list.c";
-    const char message2[] = "The parameter <list> cannot be NULL.";
-    
-    int size2 = snprintf(NULL, 0, formatter2, file2, message2);
-    char * expected_message2 = (char *) malloc((size2 + 1) * sizeof(char));
-    snprintf(expected_message2, size2 + 1, formatter2, file2, message2);
-
-    EXPECT_DEATH(listInsert(list, 0, &values[0]), expected_message2);
-
-    free(expected_message2);
+    EXPECT_DEATH(listInsert(list, 0, &values[0]), ::testing::HasSubstr("The parameter <list> cannot be NULL."));
 }

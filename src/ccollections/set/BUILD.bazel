@@ -1,7 +1,7 @@
 cc_library(
     name = "set",
-    srcs = ["hashset.c", "siphash.c"],
-    hdrs = ["hashset.h", "siphash.h"],
+    srcs = ["set.c", "siphash.c"],
+    hdrs = ["set.h", "siphash.h"],
     visibility = ["//visibility:public"],
     deps = ["//src/ccollections/common:common"],
 )
