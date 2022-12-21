@@ -22,7 +22,7 @@
 #include <stddef.h>
 
 
-#include "../common/common.h"
+#include "common.h"
 
 extern float vector_growth_factor;
 

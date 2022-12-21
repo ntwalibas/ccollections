@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 extern "C" {
-    #include "src/ccollections/deque/deque.h"
+    #include "deque.h"
 }
 
 class DequeTest: public ::testing::Test {

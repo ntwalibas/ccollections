@@ -15,15 +15,15 @@
  *  limitations under the License.
  */
 
-#ifndef CCOLLECTIONS_HASHMAP_H
-#define CCOLLECTIONS_HASHMAP_H
+#ifndef CCOLLECTIONS_MAP_H
+#define CCOLLECTIONS_MAP_H
 
 #include <stdbool.h>
 #include <stdint.h>
 #include <stddef.h>
 
 
-#include "../common/common.h"
+#include "common.h"
 
 extern float map_growth_factor;
 

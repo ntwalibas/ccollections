@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 extern "C" {
-    #include "src/ccollections/vector/vector.h"
+    #include "vector.h"
 }
 
 class VectorTest: public ::testing::Test {

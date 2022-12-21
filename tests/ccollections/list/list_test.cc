@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 extern "C" {
-    #include "src/ccollections/list/list.h"
+    #include "list.h"
 }
 
 class ListTest: public ::testing::Test {

@@ -15,15 +15,15 @@
  *  limitations under the License.
  */
 
-#ifndef CCOLLECTIONS_HASHSET_H
-#define CCOLLECTIONS_HASHSET_H
+#ifndef CCOLLECTIONS_SET_H
+#define CCOLLECTIONS_SET_H
 
 #include <stdbool.h>
 #include <stdint.h>
 #include <stddef.h>
 
 
-#include "../common/common.h"
+#include "common.h"
 
 extern float set_growth_factor;
 

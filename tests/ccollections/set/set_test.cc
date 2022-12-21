@@ -7,8 +7,7 @@
 #include <vector>
 
 extern "C" {
-    #include "src/ccollections/set/set.h"
-    #include "src/ccollections/set/siphash.h"
+    #include "set.h"
 }
 
 class HashSetTest: public ::testing::Test {

@@ -22,7 +22,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include "../common/common.h"
+#include "common.h"
 
 
 struct Buffer {

@@ -7,8 +7,7 @@
 #include <vector>
 
 extern "C" {
-    #include "src/ccollections/map/map.h"
-    #include "src/ccollections/map/siphash.h"
+    #include "map.h"
 }
 
 class HashMapTest: public ::testing::Test {

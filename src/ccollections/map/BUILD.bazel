@@ -1,7 +1,8 @@
 cc_library(
     name = "map",
     srcs = ["map.c", "siphash.c"],
-    hdrs = ["map.h", "siphash.h"],
+    hdrs = ["siphash.h"],
+    copts = ["-Iinclude"],
+    deps = ["//include:include"],
     visibility = ["//visibility:public"],
-    deps = ["//src/ccollections/common:common"],
 )

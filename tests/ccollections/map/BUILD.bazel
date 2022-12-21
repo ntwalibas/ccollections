@@ -5,5 +5,7 @@ cc_test(
   deps = [
     "@com_google_googletest//:gtest_main",
     "//src/ccollections/map:map",
+    "//include:include",
   ],
+  copts = ["-Iinclude"],
 )

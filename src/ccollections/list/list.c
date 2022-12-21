@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../common/common.h"
+#include "common.h"
 #include "list.h"
 
 static void * _listCollectionGet(struct Collection * const collection, unsigned index);

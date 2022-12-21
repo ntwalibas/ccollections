@@ -1,7 +1,7 @@
 cc_library(
     name = "deque",
     srcs = ["deque.c"],
-    hdrs = ["deque.h"],
+    copts = ["-Iinclude"],
+    deps = ["//include:include"],
     visibility = ["//visibility:public"],
-    deps = ["//src/ccollections/common:common"],
 )

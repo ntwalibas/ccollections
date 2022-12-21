@@ -1,7 +1,8 @@
 cc_library(
     name = "set",
     srcs = ["set.c", "siphash.c"],
-    hdrs = ["set.h", "siphash.h"],
+    hdrs = ["siphash.h"],
+    copts = ["-Iinclude"],
+    deps = ["//include:include"],
     visibility = ["//visibility:public"],
-    deps = ["//src/ccollections/common:common"],
 )
