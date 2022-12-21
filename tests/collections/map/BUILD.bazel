@@ -1,10 +1,10 @@
 cc_test(
-  name = "vector_test",
+  name = "map_test",
   size = "small",
-  srcs = ["vector_test.cc"],
+  srcs = ["map_test.cc"],
   deps = [
     "@com_google_googletest//:gtest_main",
-    "//src/ccollections/vector:vector",
+    "//src/collections/map:map",
     "//include:include",
   ],
   copts = ["-Iinclude"],

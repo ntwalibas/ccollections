@@ -1,10 +1,10 @@
 cc_test(
-  name = "set_test",
+  name = "list_test",
   size = "small",
-  srcs = ["set_test.cc"],
+  srcs = ["list_test.cc"],
   deps = [
     "@com_google_googletest//:gtest_main",
-    "//src/ccollections/set:set",
+    "//src/collections/list:list",
     "//include:include",
   ],
   copts = ["-Iinclude"],

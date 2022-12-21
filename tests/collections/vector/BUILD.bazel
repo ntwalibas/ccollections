@@ -1,10 +1,10 @@
 cc_test(
-  name = "deque_test",
+  name = "vector_test",
   size = "small",
-  srcs = ["deque_test.cc"],
+  srcs = ["vector_test.cc"],
   deps = [
     "@com_google_googletest//:gtest_main",
-    "//src/ccollections/deque:deque",
+    "//src/collections/vector:vector",
     "//include:include",
   ],
   copts = ["-Iinclude"],

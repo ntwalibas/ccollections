@@ -44,8 +44,8 @@ app = typer.Typer(no_args_is_help = True)
 libname = "ccollections"
 
 # We get all available targets and tests from their directory names
-targets = [f"{f.path}:{f.name}" for f in os.scandir("src/ccollections") if f.is_dir()]
-tests = [f"//{f.path}:{f.name}_test" for f in os.scandir("tests/ccollections") if f.is_dir()]
+targets = [f"{f.path}:{f.name}" for f in os.scandir("src/collections") if f.is_dir()]
+tests = [f"//{f.path}:{f.name}_test" for f in os.scandir("tests/collections") if f.is_dir()]
 
 
 # Courtesy of https://stackoverflow.com/questions/10349781/how-to-open-read-write-or-create-a-file-with-truncation-allowed/10352231#10352231
@@ -104,7 +104,7 @@ def build(
     number_of_failures = 0
 
     if target is not None:
-        target = f"src/ccollections/{target}:{target}"
+        target = f"src/collections/{target}:{target}"
         _targets = [target]
     else:
         global targets
@@ -129,7 +129,7 @@ def test(target: str = typer.Option(None, "--target", "-t")):
     number_of_failures = 0
 
     if target is not None:
-        test = f"//tests/ccollections/{target}:{target}_test"
+        test = f"//tests/collections/{target}:{target}_test"
         _tests = [test]
     else:
         global tests
