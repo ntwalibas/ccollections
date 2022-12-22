@@ -6,7 +6,7 @@ It features the following collections: dynamic array (aka vector), (doubly linke
 
 It has the following algorithms: linear search.
 
-I shall be adding a red-black tree and a binary heap any time soon.
+I shall be adding a red-black tree and a binary heap any time soon. Same with other search and sorting algorithms.
 
 This is currently for personal use right now, but if you stumble upon it, do as you please, per the license.
 
