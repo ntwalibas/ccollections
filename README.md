@@ -1,15 +1,13 @@
 # C Collections
 
-This is a small library of data structures.
+This is a small library of collections and algorithms operating on them.
 
-It futures the following data structures: dynamic array (aka vector), (doubly linked) list, (double-ended) queue, (hash) map, and (hash) set.
+It features the following collections: dynamic array (aka vector), (doubly linked) list, (double-ended) queue, (hash) map, and (hash) set.
+It has the following algorithms: linear search.
 
 I shall be adding a red-black tree and a binary heap any time soon.
 
 They are mostly for personal use right now, but if you stumble upon it, do as you please, per the license.
-
-Also, the particular design is because these data structures are meant to be used with another library of search and sorting algorithms.
-You should start seeing those in the last week of December 2022.
 
 The documentation will be coming after I'm satisfied with the tests.
 
