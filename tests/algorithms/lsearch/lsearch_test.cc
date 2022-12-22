@@ -21,7 +21,7 @@ class LSearchTest: public ::testing::Test {
         void SetUp() override {
             vector = newVector(10);
 
-            elements = (int *) malloc(10 * sizeof(*elements));
+            elements = new int[10];
             for(int i = 0; i < 10; i++) {
                 elements[i] = i + 1;
                 vectorPushBack(vector, &elements[i]);
@@ -30,7 +30,7 @@ class LSearchTest: public ::testing::Test {
 
         void TearDown() override {
             deleteVector(&vector, NULL);
-            free(elements);
+            delete elements;
         }
     
         struct Vector * vector;
