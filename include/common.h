@@ -33,7 +33,7 @@ struct Collection {
 
 // Function pointers
 typedef int (* CComparator)(void const * a, void const * b);
-typedef void (* CDeleter)(void ** element);
+typedef void (* CDeleter)(void * element);
 // ! Function pointers
 
 
