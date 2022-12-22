@@ -26,7 +26,7 @@ Then create a Python virtual environment (virtualenv or conda) and install the r
 
 Then you can run all tests with `./buildtool.py test`.
 
-Since the repo data structures isolated from each other, you can run tests for each one individually. For instance, for vector it would be `./buildtool.py test -t vector`.
+Each collection and data structure lives independently so can be also be tested independently. For instance, for the vector collection it would be `./buildtool.py test -c vector`. For the linear search algorithm, it would be `./buildtool.py test -a lsearch`.
 
 ## Building
 
