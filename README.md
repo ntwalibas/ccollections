@@ -3,6 +3,7 @@
 This is a small library of collections and algorithms operating on them.
 
 It features the following collections: dynamic array (aka vector), (doubly linked) list, (double-ended) queue, (hash) map, and (hash) set.
+
 It has the following algorithms: linear search.
 
 I shall be adding a red-black tree and a binary heap any time soon.
@@ -28,7 +29,7 @@ Each collection and algorithm lives independently so can be also be tested indep
 
 ## Building
 
-If you wish to build the binaries (.so and .a) files, you can do so with `./buildtool.py build`. Same with testing, you can specify individual targets with the `-t` option.
+If you wish to build the binaries (.so and .a) files, you can do so with `./buildtool.py build`. Same with testing, you can specify individual targets with the `-c` and `-a` options.
 
 Then you can check the `bazel-out` directory and copy the binaries from there.
 
