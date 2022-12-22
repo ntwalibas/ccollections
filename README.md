@@ -7,7 +7,7 @@ It has the following algorithms: linear search.
 
 I shall be adding a red-black tree and a binary heap any time soon.
 
-They are mostly for personal use right now, but if you stumble upon it, do as you please, per the license.
+This is currently for personal use right now, but if you stumble upon it, do as you please, per the license.
 
 The documentation will be coming after I'm satisfied with the tests.
 
@@ -24,7 +24,7 @@ Then create a Python virtual environment (virtualenv or conda) and install the r
 
 Then you can run all tests with `./buildtool.py test`.
 
-Each collection and data structure lives independently so can be also be tested independently. For instance, for the vector collection it would be `./buildtool.py test -c vector`. For the linear search algorithm, it would be `./buildtool.py test -a lsearch`.
+Each collection and algorithm lives independently so can be also be tested independently. For instance, for the vector collection it would be `./buildtool.py test -c vector`. For the linear search algorithm, it would be `./buildtool.py test -a lsearch`.
 
 ## Building
 
@@ -32,7 +32,7 @@ If you wish to build the binaries (.so and .a) files, you can do so with `./buil
 
 Then you can check the `bazel-out` directory and copy the binaries from there.
 
-But in general, you will want to test, build then build and have the binaries nicely packaged in a separate folder (this will also copy the header files for you).  
+But in general, you will want to test, build then have the binaries nicely packaged in a separate folder (this will also copy the header files for you).  
 In this case, call `./buildtool.py release` and done.
 
 ## Cleaning
