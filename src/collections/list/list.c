@@ -383,7 +383,7 @@ static void * createListNode(void * element) {
 
 static void deleteListNode(struct ListNode * node, CDeleter deleter) {
     if (deleter != NULL)
-        deleter(& node -> element);
+        deleter(node -> element);
     
     free(node);
 }

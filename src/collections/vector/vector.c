@@ -78,7 +78,7 @@ void deleteVector(struct Vector ** const vector, CDeleter deleter) {
     if (deleter != NULL) {
         for(unsigned i = 0; i < (* vector) -> size; i++) {
             void * element = (* vector) -> elements[i];
-            deleter(& element);
+            deleter(element);
         }
     }
 

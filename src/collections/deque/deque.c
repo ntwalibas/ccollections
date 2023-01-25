@@ -111,7 +111,7 @@ void deleteDeque(struct Deque ** const deque, CDeleter deleter) {
     if (deleter != NULL) {
         for(unsigned i = 0; i < (* deque) -> size; i++) {
             void * element = dequeGet(* deque, i);
-            deleter(& element);
+            deleter(element);
         }
     }
 
